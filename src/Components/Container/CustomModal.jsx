@@ -21,9 +21,9 @@ const Modal = styled.div`
   width: 60%;
   height: ${(props) => props.height || '50vh'};
   transform: translate(-50%, -50%);
-  background-color: #ECFFE0;
-  padding: 20px;
-  border-radius: 50px;
+  background-color: ${(props) => props.backgroundColor || 'white'};
+  padding: ${(props) => props.padding || '0px'};
+  border-radius: ${(props) => props.borderRadius || '0px'};
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -44,12 +44,12 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
-const CustomModal = ({ isOpen, onClose, children, height, backgroundImage }) => {
+const CustomModal = ({ isOpen, onClose, children, height, backgroundImage, borderRadius }) => {
     if (!isOpen) return null;
 
     return (
         <ModalOverlay onClick={onClose}>
-            <Modal height={height} backgroundImage={backgroundImage} onClick={(e) => e.stopPropagation()}>
+            <Modal height={height} backgroundImage={backgroundImage} onClick={(e) => e.stopPropagation()} borderRadius={borderRadius}>
                 <CloseButton onClick={onClose}>&times;</CloseButton>
                 {children}
             </Modal>

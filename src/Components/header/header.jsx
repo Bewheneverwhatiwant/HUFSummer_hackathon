@@ -6,6 +6,7 @@ import StyledImg from '../Container/StyledImg';
 import CustomFont from '../Container/CustomFont';
 import CustomColumn from '../Container/CustomColumn';
 import CustomModal from '../Container/CustomModal';
+import LoginModal from './LoginModal';
 
 const HeaderContainer = styled.header`
   position: fixed;
@@ -81,20 +82,10 @@ export default function Header() {
                     <HeaderButton onClick={openModal}>
                         LOGIN
                     </HeaderButton>
-                    <CustomModal
+                    <LoginModal
                         isOpen={isModalOpen}
                         onClose={closeModal}
-                        height="60vh"
-                    >
-                        <CustomColumn>
-                            <CustomRow>
-                                <CustomFont color='black' font='1rem' fontWeight='bold'>
-                                    로그인 모달!
-                                </CustomFont>
-
-                            </CustomRow>
-                        </CustomColumn>
-                    </CustomModal>
+                    />
                 </CustomRow>
             </CustomRow>
         </HeaderContainer>
