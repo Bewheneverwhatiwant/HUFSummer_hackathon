@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import CustomRow from '../Container/CustomRow';
 import StyledImg from '../Container/StyledImg';
 import CustomFont from '../Container/CustomFont';
+import CustomColumn from '../Container/CustomColumn';
+import CustomModal from '../Container/CustomModal';
 
 const HeaderContainer = styled.header`
   position: fixed;
@@ -56,6 +58,16 @@ export default function Header() {
         navigate('/');
     }
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
     return (
 
         <HeaderContainer>
@@ -66,9 +78,23 @@ export default function Header() {
                             로고
                         </CustomFont>
                     </LogoButton>
-                    <HeaderButton onClick={handleNavigate}>
+                    <HeaderButton onClick={openModal}>
                         LOGIN
                     </HeaderButton>
+                    <CustomModal
+                        isOpen={isModalOpen}
+                        onClose={closeModal}
+                        height="60vh"
+                    >
+                        <CustomColumn>
+                            <CustomRow>
+                                <CustomFont color='black' font='1rem' fontWeight='bold'>
+                                    로그인 모달!
+                                </CustomFont>
+
+                            </CustomRow>
+                        </CustomColumn>
+                    </CustomModal>
                 </CustomRow>
             </CustomRow>
         </HeaderContainer>
