@@ -23,7 +23,7 @@ const IsCheckedButton = styled.button`
     border-radius: 4px;
     background-color: ${props => props.isChecked ? '#54B3FF' : '#FFFFFF'};
     color: ${props => props.isChecked ? '#FFFFFF' : '#000000'};
-
+    cursor: pointer;
 `;
 
 const Input = styled.input`
@@ -39,7 +39,7 @@ export default function SignupPanel() {
     const [isIdChecked, setIsIdChecked] = useState(false);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [passwordError, setPasswordError] = useState(false); 
+    const [passwordError, setPasswordError] = useState(false);
 
     const handlePasswordChange = (e) => {
         const value = e.target.value;
@@ -69,7 +69,7 @@ export default function SignupPanel() {
             return;
         }
         try {
-            setIsIdChecked(true); 
+            setIsIdChecked(true);
         } catch (error) {
             setIsIdChecked(false);
         }
@@ -88,13 +88,13 @@ export default function SignupPanel() {
                 <CustomFont color='black'>ID</CustomFont>
             </CustomRow>
             <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
-                <CustomRow width='80%' alignItems='center' justifyContent='flex-start'>                
+                <CustomRow width='80%' alignItems='center' justifyContent='flex-start'>
                     <Input placeholder='사용하실 아이디를 입력하세요.' value={userId} onChange={e => setUserId(e.target.value)} />
                 </CustomRow>
-                
-                <CustomRow width='20%' alignItems='center' justifyContent='flex-start'>                
+
+                <CustomRow width='20%' alignItems='center' justifyContent='flex-start'>
                     <IsCheckedButton isChecked={isIdChecked} onClick={handleIdCheck}>
-                    {isIdChecked ? '사용가능' : '중복확인'}
+                        {isIdChecked ? '사용가능' : '중복확인'}
                     </IsCheckedButton>
                 </CustomRow>
 

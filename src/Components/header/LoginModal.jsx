@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CustomModal from '../Container/CustomModal';
 import CustomFont from '../Container/CustomFont';
 import CustomColumn from '../Container/CustomColumn';
 import CustomRow from '../Container/CustomRow';
-import SignupPanel from './SignupPanel';  // SignupPanel 임포트
+import SignupPanel from './SignupPanel';
 
 const ModalContent = styled.div`
   display: flex;
@@ -60,43 +60,50 @@ const Link = styled.a`
 `;
 
 const LoginPanel = ({ switchToSignup }) => (
-    <CustomColumn width='100%' alignItems='center' justifyContent='center' gap='10px'>
-        <CustomFont color='black' font='1.2rem'>로그인</CustomFont>
-        <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
-            <CustomFont color='black'>ID</CustomFont>
-        </CustomRow>
-        <Input type="text" placeholder="아이디를 입력하세요." />
-        <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
-            <CustomFont color='black'>PW</CustomFont>
-        </CustomRow>
-        <Input type="password" placeholder="비밀번호를 입력하세요." />
-        <Button>로그인</Button>
-        <CustomRow>
-            <CustomFont color='#4A90E2'>(서비스명)이 처음이시라면?</CustomFont>
-            <Link onClick={switchToSignup}>회원가입</Link>
-        </CustomRow>
-    </CustomColumn>
+  <CustomColumn width='100%' alignItems='center' justifyContent='center' gap='10px'>
+    <CustomFont color='black' font='1.2rem'>로그인</CustomFont>
+    <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
+      <CustomFont color='black'>ID</CustomFont>
+    </CustomRow>
+    <Input type="text" placeholder="아이디를 입력하세요." />
+    <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
+      <CustomFont color='black'>PW</CustomFont>
+    </CustomRow>
+    <Input type="password" placeholder="비밀번호를 입력하세요." />
+    <Button>로그인</Button>
+    <CustomRow>
+      <CustomFont color='#4A90E2'>(서비스명)이 처음이시라면?</CustomFont>
+      <Link onClick={switchToSignup}>회원가입</Link>
+    </CustomRow>
+  </CustomColumn>
 );
 
 const LoginModal = ({ isOpen, onClose }) => {
-    const [isSignup, setIsSignup] = useState(false);
+  const [isSignup, setIsSignup] = useState(false);
 
-    const switchToSignup = () => setIsSignup(true);
-    const switchToLogin = () => setIsSignup(false);
+  const switchToSignup = () => setIsSignup(true);
+  const switchToLogin = () => setIsSignup(false);
 
-    return (
-        <CustomModal isOpen={isOpen} onClose={onClose} height="60vh" borderRadius='50px'>
-            <ModalContent>
-                <LeftPanel>
-                    <img src="https://twemoji.maxcdn.com/v/latest/72x72/1f44b.png" alt="Wave Emoji" />
-                    <CustomFont color='white' font='2rem' fontWeight='bold'>HELLO!<br />(서비스명)</CustomFont>
-                </LeftPanel>
-                <RightPanel>
-                    {isSignup ? <SignupPanel /> : <LoginPanel switchToSignup={switchToSignup} />}
-                </RightPanel>
-            </ModalContent>
-        </CustomModal>
-    );
+  // isOpen 상태가 변경될 때마다 isSignup 상태를 초기화
+  useEffect(() => {
+    if (isOpen) {
+      setIsSignup(false);
+    }
+  }, [isOpen]);
+
+  return (
+    <CustomModal isOpen={isOpen} onClose={onClose} height="60vh" borderRadius='50px'>
+      <ModalContent>
+        <LeftPanel>
+          <img src="https://twemoji.maxcdn.com/v/latest/72x72/1f44b.png" alt="Wave Emoji" />
+          <CustomFont color='white' font='2rem' fontWeight='bold'>HELLO!<br />(서비스명)</CustomFont>
+        </LeftPanel>
+        <RightPanel>
+          {isSignup ? <SignupPanel /> : <LoginPanel switchToSignup={switchToSignup} />}
+        </RightPanel>
+      </ModalContent>
+    </CustomModal>
+  );
 };
 
 export default LoginModal;
