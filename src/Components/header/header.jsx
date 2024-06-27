@@ -51,7 +51,7 @@ const LogoButton = styled.button`
 export default function Header() {
     const navigate = useNavigate();
 
-    const handleNavigate = () => {
+    const mypage = () => {
         navigate('/mypage');
     };
 
@@ -79,9 +79,14 @@ export default function Header() {
                             로고
                         </CustomFont>
                     </LogoButton>
-                    <HeaderButton onClick={openModal}>
-                        LOGIN
-                    </HeaderButton>
+                    <CustomRow>
+                        <HeaderButton onClick={openModal}>
+                            LOGIN
+                        </HeaderButton>
+                        <HeaderButton onClick={mypage}>
+                            MY
+                        </HeaderButton>
+                    </CustomRow>
                     <LoginModal
                         isOpen={isModalOpen}
                         onClose={closeModal}
