@@ -26,6 +26,17 @@ const LeftPanel = styled.div`
   gap: 10px;
 `;
 
+const EmojiContainer = styled.div`
+  background-color: white;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+`;
+
 const RightPanel = styled.div`
   display: flex;
   flex-direction: column;
@@ -80,14 +91,37 @@ const LoginPanel = ({ switchToSignup }) => (
 
 const LoginModal = ({ isOpen, onClose }) => {
   const [isSignup, setIsSignup] = useState(false);
+  const [image, setImage] = useState('https://file.thisisgame.com/upload/tboard/user/2010/03/24/20100324150608_1019.jpg');
+  const [headerText, setHeaderText] = useState(['HELLO!', '(서비스명)']);
 
-  const switchToSignup = () => setIsSignup(true);
-  const switchToLogin = () => setIsSignup(false);
+  const switchToSignup = () => {
+    setIsSignup(true);
+    setHeaderText(['WELCOME!', '프로필 사진을 선택하세요.']);
+  };
+
+  const switchToLogin = () => {
+    setIsSignup(false);
+    setHeaderText(['HELLO!', '(서비스명)']);
+  };
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
 
   // isOpen 상태가 변경될 때마다 isSignup 상태를 초기화
   useEffect(() => {
     if (isOpen) {
       setIsSignup(false);
+      setHeaderText(['HELLO!', '(서비스명)']);
     }
   }, [isOpen]);
 
@@ -95,11 +129,18 @@ const LoginModal = ({ isOpen, onClose }) => {
     <CustomModal isOpen={isOpen} onClose={onClose} height="60vh" borderRadius='50px'>
       <ModalContent>
         <LeftPanel>
-          <img src="https://twemoji.maxcdn.com/v/latest/72x72/1f44b.png" alt="Wave Emoji" />
-          <CustomFont color='white' font='2rem' fontWeight='bold'>HELLO!<br />(서비스명)</CustomFont>
+          <EmojiContainer>
+            <img src={image} alt="Custom Emoji" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </EmojiContainer>
+          {headerText.map((line, index) => (
+            <CustomFont key={index} color='white' font='1.8rem' fontWeight='bold'>
+              {line}
+            </CustomFont>
+          ))}
+          {isSignup && <Input type="file" accept="image/*" onChange={handleImageUpload} />}
         </LeftPanel>
         <RightPanel>
-          {isSignup ? <SignupPanel /> : <LoginPanel switchToSignup={switchToSignup} />}
+          {isSignup ? <SignupPanel switchToLogin={switchToLogin} /> : <LoginPanel switchToSignup={switchToSignup} />}
         </RightPanel>
       </ModalContent>
     </CustomModal>
