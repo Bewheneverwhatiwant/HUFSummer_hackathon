@@ -101,28 +101,18 @@ export default function SignupPanel({ switchToLogin }) {
 
   const handleSignup = async () => {
     if (isFormValid) {
-      const formData = new FormData();
       const data = {
         email: name,
         nickname: userId,
         password: password
       };
-      //formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-      // formData.append('data', new Blob([JSON.stringify(data)]), { type: "application/json" }); // 수정: Blob 대신 JSON 문자열 그대로 추가
-      formData.append('data', JSON.stringify(data), { type: 'application/json' });
-      formData.append('profileImage', profileImage);
-      // if (profileImage) {
-      //   formData.append('profileImage', profileImage, { type: "multipart/form-data" });
-      // }
 
       try {
-        const response = await axios.post(`${import.meta.env.VITE_REACT_APP_SERVER}/auth/signup`, formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
+        const response = await axios.post(`${import.meta.env.VITE_REACT_APP_SERVER}/auth/signup`, data, {
+          headers: {
+            'Content-Type': 'application/json'
           }
-        );
+        });
         console.log('회원가입 성공', response.data);
         alert('회원가입되었습니다!');
         switchToLogin();
@@ -130,7 +120,6 @@ export default function SignupPanel({ switchToLogin }) {
         console.error('회원가입 실패', error);
         alert('회원가입에 실패했습니다.');
         console.log('데이터:', data);
-        console.log('프로필 이미지:', profileImage);
       }
     }
   };

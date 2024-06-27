@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import CustomModal from '../Container/CustomModal';
 import CustomFont from '../Container/CustomFont';
 import CustomColumn from '../Container/CustomColumn';
@@ -70,24 +71,48 @@ const Link = styled.a`
   text-decoration: underline;
 `;
 
-const LoginPanel = ({ switchToSignup }) => (
-  <CustomColumn width='100%' alignItems='center' justifyContent='center' gap='10px'>
-    <CustomFont color='black' font='1.2rem'>로그인</CustomFont>
-    <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
-      <CustomFont color='black'>ID</CustomFont>
-    </CustomRow>
-    <Input type="text" placeholder="아이디를 입력하세요." />
-    <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
-      <CustomFont color='black'>PW</CustomFont>
-    </CustomRow>
-    <Input type="password" placeholder="비밀번호를 입력하세요." />
-    <Button>로그인</Button>
-    <CustomRow>
-      <CustomFont color='#4A90E2'>(서비스명)이 처음이시라면?</CustomFont>
-      <Link onClick={switchToSignup}>회원가입</Link>
-    </CustomRow>
-  </CustomColumn>
-);
+const LoginPanel = ({ switchToSignup, onClose }) => {
+  const [userId, setUserId] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_REACT_APP_SERVER}/auth/login`, {
+        nickname: userId,
+        password: password,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('로그인 성공', response.data);
+      alert('로그인되었습니다!');
+      onClose();
+    } catch (error) {
+      console.error('로그인 실패', error.response?.data || error.message);
+      alert('로그인에 실패하였습니다.');
+    }
+  };
+
+  return (
+    <CustomColumn width='100%' alignItems='center' justifyContent='center' gap='10px'>
+      <CustomFont color='black' font='1.2rem'>로그인</CustomFont>
+      <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
+        <CustomFont color='black'>ID</CustomFont>
+      </CustomRow>
+      <Input type="text" placeholder="아이디를 입력하세요." value={userId} onChange={e => setUserId(e.target.value)} />
+      <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
+        <CustomFont color='black'>PW</CustomFont>
+      </CustomRow>
+      <Input type="password" placeholder="비밀번호를 입력하세요." value={password} onChange={e => setPassword(e.target.value)} />
+      <Button onClick={handleLogin}>로그인</Button>
+      <CustomRow>
+        <CustomFont color='#4A90E2'>(서비스명)이 처음이시라면?</CustomFont>
+        <Link onClick={switchToSignup}>회원가입</Link>
+      </CustomRow>
+    </CustomColumn>
+  );
+};
 
 const LoginModal = ({ isOpen, onClose }) => {
   const [isSignup, setIsSignup] = useState(false);
@@ -126,7 +151,7 @@ const LoginModal = ({ isOpen, onClose }) => {
           ))}
         </LeftPanel>
         <RightPanel>
-          {isSignup ? <SignupPanel switchToLogin={switchToLogin} /> : <LoginPanel switchToSignup={switchToSignup} />}
+          {isSignup ? <SignupPanel switchToLogin={switchToLogin} /> : <LoginPanel switchToSignup={switchToSignup} onClose={onClose} />}
         </RightPanel>
       </ModalContent>
     </CustomModal>
