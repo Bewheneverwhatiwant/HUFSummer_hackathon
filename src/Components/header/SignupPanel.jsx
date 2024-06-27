@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import CustomColumn from '../Container/CustomColumn';
 import CustomFont from '../Container/CustomFont';
 import CustomRow from '../Container/CustomRow';
@@ -39,6 +40,8 @@ export default function SignupPanel({ switchToLogin }) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
+  const [profileImage, setProfileImage] = useState(null);
+  const [name, setName] = useState('');
 
   const handlePasswordChange = (e) => {
     const value = e.target.value;
@@ -60,7 +63,11 @@ export default function SignupPanel({ switchToLogin }) {
     }
   };
 
-  const isFormValid = userId && isIdChecked && password && confirmPassword && !passwordError;
+  const handleProfileImageChange = (e) => {
+    setProfileImage(e.target.files[0]);
+  };
+
+  const isFormValid = userId && isIdChecked && password && confirmPassword && !passwordError && name;
 
   const handleIdCheck = async () => {
     if (!userId) {
@@ -68,26 +75,51 @@ export default function SignupPanel({ switchToLogin }) {
       return;
     }
     try {
+      // ID 중복 확인 로직
       setIsIdChecked(true);
     } catch (error) {
       setIsIdChecked(false);
     }
   };
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (isFormValid) {
-      switchToLogin();
+      const formData = new FormData();
+      const data = {
+        email: name,
+        nickname: userId,
+        password: password
+      };
+      //formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+      // formData.append('data', new Blob([JSON.stringify(data)]), { type: "application/json" }); // 수정: Blob 대신 JSON 문자열 그대로 추가
+      formData.append('data', JSON.stringify(data), { type: 'application/json' });
+      formData.append('profileImage', profileImage);
+      // if (profileImage) {
+      //   formData.append('profileImage', profileImage, { type: "multipart/form-data" });
+      // }
+
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_REACT_APP_SERVER}/auth/signup`, formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+        );
+        console.log('회원가입 성공', response.data);
+        switchToLogin();
+      } catch (error) {
+        console.error('회원가입 실패', error);
+        // 실패 시 data와 profileImage 콘솔에 출력
+        console.log('데이터:', data);
+        console.log('프로필 이미지:', profileImage);
+      }
     }
   };
 
   return (
     <CustomColumn width='100%' alignItems='center' justifyContent='center' gap='10px'>
       <CustomFont color='black' font='1.2rem'>회원가입</CustomFont>
-
-      <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
-        <CustomFont color='black'>NAME</CustomFont>
-      </CustomRow>
-      <Input type="text" placeholder="이름을 알려주세요." />
 
       <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
         <CustomFont color='black'>ID</CustomFont>
@@ -115,6 +147,16 @@ export default function SignupPanel({ switchToLogin }) {
         onChange={handleConfirmPasswordChange}
         isError={passwordError}
       />
+
+      <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
+        <CustomFont color='black'>EMAIL</CustomFont>
+      </CustomRow>
+      <Input type="text" placeholder="이메일을 알려주세요." value={name} onChange={e => setName(e.target.value)} />
+
+      <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
+        <CustomFont color='black'>프로필 이미지</CustomFont>
+      </CustomRow>
+      <Input type="file" accept="image/*" onChange={handleProfileImageChange} />
 
       <Button isActive={isFormValid} onClick={handleSignup}>회원가입</Button>
     </CustomColumn>
