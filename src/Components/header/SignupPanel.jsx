@@ -73,31 +73,64 @@ export default function SignupPanel({ switchToLogin }) {
   // 프로필 이미지는 필수가 아니도록 수정함 !! 
   const isFormValid = userId && isIdChecked && isEmailChecked && password && confirmPassword && !passwordError && name;
 
+
+  //아이디 중복 체크 시작
   const handleIdCheck = async () => {
     if (!userId) {
       alert('아이디를 입력하세요.');
       return;
     }
     try {
-      // ID 중복 확인 API 연동해야함 !!
-      setIsIdChecked(true);
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/auth/check-nickname`, {
+        params: { nickname: userId }
+      });
+      
+      if (response.status === 200) {
+        setIsIdChecked(true);
+        alert('사용 가능한 아이디입니다.');
+        console.log(userId);
+      }
     } catch (error) {
       setIsIdChecked(false);
+      if (error.response && error.response.status === 400) {
+        alert('이미 사용 중인 아이디입니다.');
+      } else {
+        console.error('아이디 중복 검사 실패', error);
+        alert('아이디 중복 검사에 실패했습니다.');
+      }
     }
   };
+  //아이디 중복 체크 끝
 
+
+  //이메일 중복 체크 시작
   const handleEmailCheck = async () => {
     if (!name) {
       alert('이메일을 입력하세요.');
       return;
     }
     try {
-      // 이메일 중복 확인 API 연동해야함 !!
-      setIsEmailChecked(true);
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/auth/check-email`, {
+        params: { email: name }
+      });
+      if (response.status === 200) {
+        setIsEmailChecked(true);
+        alert('사용 가능한 이메일입니다.');
+        console.log(name);
+
+      }
     } catch (error) {
       setIsEmailChecked(false);
+      if (error.response && error.response.status === 400) {
+        alert('이미 사용 중인 이메일입니다.');
+      } else {
+        console.error('이메일 중복 검사 실패', error);
+        alert('이메일 중복 검사에 실패했습니다.');
+      }
     }
   };
+  //이메일 중복 체크 끝
+
 
   const handleSignup = async () => {
     if (isFormValid) {
