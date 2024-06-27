@@ -51,7 +51,7 @@ const LogoButton = styled.button`
 
 export default function Header() {
     const navigate = useNavigate();
-    const { auth } = useAuth(); // useAuth 훅 사용
+    const { auth, logout } = useAuth(); // useAuth 훅 사용
 
     const mypage = () => {
         navigate('/mypage');
@@ -59,7 +59,12 @@ export default function Header() {
 
     const Back = () => {
         navigate('/');
-    }
+    };
+
+    const handleLogout = () => {
+        alert('로그아웃 되었습니다!');
+        logout();
+    };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -92,6 +97,9 @@ export default function Header() {
                                 </CustomFont>
                                 <HeaderButton onClick={mypage}>
                                     MY
+                                </HeaderButton>
+                                <HeaderButton onClick={handleLogout}>
+                                    LOGOUT
                                 </HeaderButton>
                             </>
                         )}
