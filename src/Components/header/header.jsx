@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../pages/SubPage/AuthContext';
 import CustomRow from '../Container/CustomRow';
 import StyledImg from '../Container/StyledImg';
 import CustomFont from '../Container/CustomFont';
@@ -50,6 +51,7 @@ const LogoButton = styled.button`
 
 export default function Header() {
     const navigate = useNavigate();
+    const { auth } = useAuth(); // useAuth 훅 사용
 
     const mypage = () => {
         navigate('/mypage');
@@ -70,7 +72,6 @@ export default function Header() {
     };
 
     return (
-
         <HeaderContainer>
             <CustomRow width='97%' justifyContent='center'>
                 <CustomRow width='100%' justifyContent='space-between'>
@@ -80,12 +81,20 @@ export default function Header() {
                         </CustomFont>
                     </LogoButton>
                     <CustomRow>
-                        <HeaderButton onClick={openModal}>
-                            LOGIN
-                        </HeaderButton>
-                        <HeaderButton onClick={mypage}>
-                            MY
-                        </HeaderButton>
+                        {!auth.isLoggedIn ? (
+                            <HeaderButton onClick={openModal}>
+                                LOGIN
+                            </HeaderButton>
+                        ) : (
+                            <>
+                                <CustomFont color='black' fontSize='12px' margin='0 10px'>
+                                    {auth.nickname}
+                                </CustomFont>
+                                <HeaderButton onClick={mypage}>
+                                    MY
+                                </HeaderButton>
+                            </>
+                        )}
                     </CustomRow>
                     <LoginModal
                         isOpen={isModalOpen}

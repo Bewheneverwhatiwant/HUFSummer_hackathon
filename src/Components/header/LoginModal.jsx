@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useAuth } from '../../pages/SubPage/AuthContext';
 import CustomModal from '../Container/CustomModal';
 import CustomFont from '../Container/CustomFont';
 import CustomColumn from '../Container/CustomColumn';
@@ -74,6 +75,7 @@ const Link = styled.a`
 const LoginPanel = ({ switchToSignup, onClose }) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const { login } = useAuth();
 
   const handleLogin = async () => {
     try {
@@ -86,6 +88,11 @@ const LoginPanel = ({ switchToSignup, onClose }) => {
         },
       });
       console.log('로그인 성공', response.data);
+      const { nickname, email } = response.data;
+      // 여기서 반환되는 nickname과 email을 AuthContext에 담도록 수정하기 (백엔드에게 반환값 수정 의뢰)!!
+      console.log(nickname);
+      console.log(email);
+      login(nickname, email); // 로그인 성공 시 nickname과 email이 담겨지는 부분
       alert('로그인되었습니다!');
       onClose();
     } catch (error) {
