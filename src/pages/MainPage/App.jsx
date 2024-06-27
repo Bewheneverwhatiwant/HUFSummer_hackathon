@@ -33,7 +33,7 @@ export default function App() {
     <ContainerCenter>
       <PageContainer>
 
-        메인페이지
+        HUFSummer
       </PageContainer>
     </ContainerCenter>
   )
