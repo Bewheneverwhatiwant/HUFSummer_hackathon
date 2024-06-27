@@ -141,6 +141,7 @@ export default function SignupPanel({ switchToLogin }) {
 
       <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
         <CustomFont color='black'>ID</CustomFont>
+        <CustomFont color='red'>*</CustomFont>
       </CustomRow>
       <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
         <CustomRow width='80%' alignItems='center' justifyContent='flex-start'>
@@ -156,6 +157,7 @@ export default function SignupPanel({ switchToLogin }) {
 
       <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
         <CustomFont color='black'>PASSWORD</CustomFont>
+        <CustomFont color='red'>*</CustomFont>
       </CustomRow>
       <Input type="password" placeholder="비밀번호를 입력하세요." value={password} onChange={handlePasswordChange} />
       <Input
@@ -168,6 +170,7 @@ export default function SignupPanel({ switchToLogin }) {
 
       <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
         <CustomFont color='black'>EMAIL</CustomFont>
+        <CustomFont color='red'>*</CustomFont>
       </CustomRow>
       <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
         <CustomRow width='80%' alignItems='center' justifyContent='flex-start'>
@@ -182,6 +185,7 @@ export default function SignupPanel({ switchToLogin }) {
 
       <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
         <CustomFont color='black'>프로필 이미지</CustomFont>
+        <CustomFont color='black'>(선택)</CustomFont>
       </CustomRow>
       <Input type="file" accept="image/*" onChange={handleProfileImageChange} />
 
