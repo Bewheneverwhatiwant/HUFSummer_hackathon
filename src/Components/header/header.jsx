@@ -64,6 +64,7 @@ export default function Header() {
     const handleLogout = () => {
         alert('로그아웃 되었습니다!');
         logout();
+        navigate('/');
     };
 
     const [isModalOpen, setIsModalOpen] = useState(false);

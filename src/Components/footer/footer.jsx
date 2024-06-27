@@ -8,7 +8,7 @@ import CustomFont from '../Container/CustomFont';
 import CustomColumn from '../Container/CustomColumn';
 import axios from 'axios';
 
-// 이 파일에서 회원탈퇴 API 연동하기 !!
+// 이 파일에서 회원탈퇴 API 연동하기 !! -> swagger 수정 후 400에러 해결해야함
 
 const FooterContainer = styled.footer`
   display: flex;

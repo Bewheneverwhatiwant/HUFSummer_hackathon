@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useAuth } from '../../SubPage/AuthContext';
+import CustomRow from '../../../Components/Container/CustomRow';
+import CustomFont from '../../../Components/Container/CustomFont';
+import CustomColumn from '../../../Components/Container/CustomColumn';
 
 const ContainerCenter = styled.div`
   display: flex;
@@ -48,14 +52,17 @@ const Button = styled.button`
 `;
 
 export default function App() {
+  const { auth } = useAuth();
   const [profileImage, setProfileImage] = useState(null);
-  const [preview, setPreview] = useState(null);
+  const [preview, setPreview] = useState('icon_normalProfile.png'); // 기본 이미지
+  const [isButtonVisible, setIsButtonVisible] = useState(false);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setProfileImage(file);
       setPreview(URL.createObjectURL(file));
+      setIsButtonVisible(true);
     }
   };
 
@@ -77,13 +84,28 @@ export default function App() {
     }
   };
 
+  const handleButtonClick = () => {
+    if (window.confirm('프로필 사진을 변경하시겠습니까?')) {
+      handleProfileUpdate();
+    }
+  };
+
   return (
     <ContainerCenter>
       <PageContainer>
-        여기는 마이페이지
-        {preview && <ProfileImage src={preview} alt="Profile Preview" />}
-        <FileInput type="file" accept="image/*" onChange={handleImageChange} />
-        <Button onClick={handleProfileUpdate}>프로필 변경</Button>
+        <CustomRow width='100%' alignItems='center' justifyContent='center'>
+          <CustomColumn>
+            <ProfileImage src={preview} alt="Profile Preview" />
+            <FileInput type="file" accept="image/*" onChange={handleImageChange} />
+            {isButtonVisible && <Button onClick={handleButtonClick}>프로필 변경</Button>}
+          </CustomColumn>
+          {auth.isLoggedIn && (
+            <CustomColumn>
+              <CustomFont color='black' font='1rem' fontWeight='bold'>닉네임: {auth.nickname}</CustomFont>
+              <CustomFont color='black' font='1rem' fontWeight='bold'>이메일: {auth.email}</CustomFont>
+            </CustomColumn>
+          )}
+        </CustomRow>
       </PageContainer>
     </ContainerCenter>
   );
