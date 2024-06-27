@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
+import React from 'react';
+import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../pages/SubPage/AuthContext';
 import CustomRow from '../Container/CustomRow';
 import StyledImg from '../Container/StyledImg';
 import CustomFont from '../Container/CustomFont';
@@ -21,7 +22,18 @@ const FooterContainer = styled.footer`
   gap: 10px;
 `;
 
+const WithdrawButton = styled.button`
+  background-color: transparent;
+  color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+`;
+
+// 백엔드와 협의하여 수정하기
 export default function Footer() {
+    const { auth, logout } = useAuth();
     const navigate = useNavigate();
 
     const withdraw = async () => {
@@ -29,16 +41,16 @@ export default function Footer() {
             const response = await axios.delete(`${import.meta.env.VITE_REACT_APP_SERVER}/auth/termination`);
             if (response.status === 200) {
                 alert('회원 탈퇴가 완료되었습니다.');
+                logout();
+                navigate('/');
             }
         } catch (error) {
             console.error('회원 탈퇴 실패', error);
             alert('회원 탈퇴 중 오류가 발생했습니다.');
         }
     };
-    
 
     return (
-
         <FooterContainer>
             <CustomRow width='60%' alignItems='center' justifyContent='center'>
                 <StyledImg src={'HUFS_logo.png'} width='120px' height='100px' />
@@ -52,7 +64,9 @@ export default function Footer() {
                     <CustomFont color='#929292'>
                         Team Member: 이다은, 이나영, 조유리, 김시원
                     </CustomFont>
-                    <button onClick={withdraw}>회원탈퇴</button>
+                    {auth.isLoggedIn && (
+                        <WithdrawButton onClick={withdraw}>회원탈퇴</WithdrawButton>
+                    )}
                 </CustomColumn>
             </CustomRow>
         </FooterContainer>
