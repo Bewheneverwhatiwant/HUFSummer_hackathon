@@ -96,25 +96,12 @@ const LoginModal = ({ isOpen, onClose }) => {
 
   const switchToSignup = () => {
     setIsSignup(true);
-    setHeaderText(['WELCOME!', '프로필 사진을 선택하세요.']);
+    setHeaderText(['WELCOME!']);
   };
 
   const switchToLogin = () => {
     setIsSignup(false);
     setHeaderText(['HELLO!', '(서비스명)']);
-  };
-
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setImage(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
   };
 
   // isOpen 상태가 변경될 때마다 isSignup 상태를 초기화
@@ -126,7 +113,7 @@ const LoginModal = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   return (
-    <CustomModal isOpen={isOpen} onClose={onClose} height="60vh" borderRadius='50px'>
+    <CustomModal isOpen={isOpen} onClose={onClose} height="80vh" borderRadius='50px'>
       <ModalContent>
         <LeftPanel>
           <EmojiContainer>
@@ -137,7 +124,7 @@ const LoginModal = ({ isOpen, onClose }) => {
               {line}
             </CustomFont>
           ))}
-          {isSignup && <Input type="file" accept="image/*" onChange={handleImageUpload} />}
+          {/* {isSignup && <Input type="file" accept="image/*" onChange={handleImageUpload} />} */}
         </LeftPanel>
         <RightPanel>
           {isSignup ? <SignupPanel switchToLogin={switchToLogin} /> : <LoginPanel switchToSignup={switchToSignup} />}

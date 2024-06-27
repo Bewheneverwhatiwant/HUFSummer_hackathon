@@ -6,13 +6,15 @@ import StyledImg from '../Container/StyledImg';
 import CustomFont from '../Container/CustomFont';
 import CustomColumn from '../Container/CustomColumn';
 
+// 이 파일에서 회원탈퇴 API 연동하기 !!
+
 const FooterContainer = styled.footer`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 13vh;
+  height: 17vh;
   background: #5D5D5D;
   color: white;
   gap: 10px;
@@ -36,6 +38,7 @@ export default function Footer() {
                     <CustomFont color='#929292'>
                         Team Member: 이다은, 이나영, 조유리, 류동현
                     </CustomFont>
+                    <button>회원탈퇴</button>
                 </CustomColumn>
             </CustomRow>
         </FooterContainer>

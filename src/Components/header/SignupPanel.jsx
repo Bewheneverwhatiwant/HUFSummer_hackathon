@@ -107,10 +107,11 @@ export default function SignupPanel({ switchToLogin }) {
           }
         );
         console.log('회원가입 성공', response.data);
+        alert('회원가입되었습니다!');
         switchToLogin();
       } catch (error) {
         console.error('회원가입 실패', error);
-        // 실패 시 data와 profileImage 콘솔에 출력
+        alert('회원가입에 실패했습니다.');
         console.log('데이터:', data);
         console.log('프로필 이미지:', profileImage);
       }
