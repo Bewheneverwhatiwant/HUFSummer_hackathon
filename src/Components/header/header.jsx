@@ -87,7 +87,7 @@ export default function Header() {
                             </HeaderButton>
                         ) : (
                             <>
-                                <CustomFont color='black' fontSize='12px' margin='0 10px'>
+                                <CustomFont color='black' fontSize='1rem' margin='0 10px' fontWeight='bold'>
                                     {auth.nickname}
                                 </CustomFont>
                                 <HeaderButton onClick={mypage}>
