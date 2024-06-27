@@ -124,7 +124,6 @@ const LoginModal = ({ isOpen, onClose }) => {
               {line}
             </CustomFont>
           ))}
-          {/* {isSignup && <Input type="file" accept="image/*" onChange={handleImageUpload} />} */}
         </LeftPanel>
         <RightPanel>
           {isSignup ? <SignupPanel switchToLogin={switchToLogin} /> : <LoginPanel switchToSignup={switchToSignup} />}

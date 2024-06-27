@@ -5,6 +5,8 @@ import CustomColumn from '../Container/CustomColumn';
 import CustomFont from '../Container/CustomFont';
 import CustomRow from '../Container/CustomRow';
 
+// 아이디, 이메일 중복검사 API 연동 필요 !!
+
 const Button = styled.button`
   width: 100%;
   padding: 10px;
@@ -36,7 +38,8 @@ const Input = styled.input`
 
 export default function SignupPanel({ switchToLogin }) {
   const [userId, setUserId] = useState('');
-  const [isIdChecked, setIsIdChecked] = useState(false);
+  const [isIdChecked, setIsIdChecked] = useState(false); // 아이디 중복검사
+  const [isEmailChecked, setIsEmailChecked] = useState(false); // 이메일 중복검사 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
@@ -67,7 +70,8 @@ export default function SignupPanel({ switchToLogin }) {
     setProfileImage(e.target.files[0]);
   };
 
-  const isFormValid = userId && isIdChecked && password && confirmPassword && !passwordError && name;
+  // 프로필 이미지는 필수가 아니도록 수정함 !! 
+  const isFormValid = userId && isIdChecked && isEmailChecked && password && confirmPassword && !passwordError && name;
 
   const handleIdCheck = async () => {
     if (!userId) {
@@ -75,10 +79,23 @@ export default function SignupPanel({ switchToLogin }) {
       return;
     }
     try {
-      // ID 중복 확인 로직
+      // ID 중복 확인 API 연동해야함 !!
       setIsIdChecked(true);
     } catch (error) {
       setIsIdChecked(false);
+    }
+  };
+
+  const handleEmailCheck = async () => {
+    if (!name) {
+      alert('이메일을 입력하세요.');
+      return;
+    }
+    try {
+      // 이메일 중복 확인 API 연동해야함 !!
+      setIsEmailChecked(true);
+    } catch (error) {
+      setIsEmailChecked(false);
     }
   };
 
@@ -152,7 +169,16 @@ export default function SignupPanel({ switchToLogin }) {
       <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
         <CustomFont color='black'>EMAIL</CustomFont>
       </CustomRow>
-      <Input type="text" placeholder="이메일을 알려주세요." value={name} onChange={e => setName(e.target.value)} />
+      <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
+        <CustomRow width='80%' alignItems='center' justifyContent='flex-start'>
+          <Input type="text" placeholder="이메일을 알려주세요." value={name} onChange={e => setName(e.target.value)} />
+        </CustomRow>
+        <CustomRow width='20%' alignItems='center' justifyContent='flex-start'>
+          <IsCheckedButton isChecked={isEmailChecked} onClick={handleEmailCheck}>
+            {isEmailChecked ? '사용가능' : '중복확인'}
+          </IsCheckedButton>
+        </CustomRow>
+      </CustomRow>
 
       <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
         <CustomFont color='black'>프로필 이미지</CustomFont>

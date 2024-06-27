@@ -26,9 +26,9 @@ export default function Footer() {
     return (
 
         <FooterContainer>
-            <CustomRow width='50%' alignItems='center' justifyContent='center'>
+            <CustomRow width='60%' alignItems='center' justifyContent='center'>
                 <StyledImg src={'HUFS_logo.png'} width='120px' height='100px' />
-                <CustomColumn width='30%' alignItems='flex-start' justifyContent='center' gap='10px'>
+                <CustomColumn width='40%' alignItems='flex-start' justifyContent='center' gap='10px'>
                     <CustomFont color='#929292'>
                         HUFSummer-Hackathon
                     </CustomFont>
@@ -36,7 +36,7 @@ export default function Footer() {
                         Team Name: 뭉풀(뭉치면 풀스택)
                     </CustomFont>
                     <CustomFont color='#929292'>
-                        Team Member: 이다은, 이나영, 조유리, 류동현
+                        Team Member: 이다은, 이나영, 조유리, 김시원
                     </CustomFont>
                     <button>회원탈퇴</button>
                 </CustomColumn>
