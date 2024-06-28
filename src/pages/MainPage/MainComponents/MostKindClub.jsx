@@ -90,7 +90,7 @@ const App = () => {
 
     return (
         <Container>
-            <Title>오늘, 가장 선행~ 야구 팬클럽은?</Title>
+            <Title>오늘, 가장 선행한 야구 팬클럽은?</Title>
             <Subtitle>30분 단위로 갱신됩니다.</Subtitle>
             <ClubContainer>
                 {clubs.map((club) => (

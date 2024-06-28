@@ -70,6 +70,50 @@ const TopImg = styled.div`
   }
 `;
 
+const GrassContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 60vh;
+`;
+
+const GrassImg = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background-image: url('grass.png');
+  background-size: 100% 100%;
+  z-index: 1;
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    z-index: 2;
+  }
+
+  &::before {
+    top: 0;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+  }
+
+  &::after {
+    bottom: 0;
+    background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+  }
+`;
+
+const CustomRowWithPosition = styled(CustomRow)`
+  position: absolute;
+  bottom: 10px; /* 적절한 값을 설정해 맞추세요 */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+`;
+
 const MissionDivContainer = styled.div`
   width: 100%;
   position: absolute;
@@ -116,10 +160,14 @@ export default function App() {
           </MissionDivContainer>
         </TopImgContainer>
         <NowContest />
-        <CustomRow width='70%' alignItems='flex-start' justifyContent='center' gap='5px'>
-          <MostKindFan />
-          <MostKindClub />
-        </CustomRow>
+
+        <GrassContainer>
+          <GrassImg />
+          <CustomRowWithPosition width='70%' alignItems='flex-start' justifyContent='center' gap='5px'>
+            <MostKindFan />
+            <MostKindClub />
+          </CustomRowWithPosition>
+        </GrassContainer>
         <DonateParl />
         <DonateThings />
       </PageContainer>
