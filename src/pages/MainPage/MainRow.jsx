@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import CustomRow from '../../Components/Container/CustomRow';
 import CustomColumn from '../../Components/Container/CustomColumn';
 import CustomFont from '../../Components/Container/CustomFont';
+import { useAuth } from '../../pages/SubPage/AuthContext';
 
 const Container = styled.div`
   display: flex;
@@ -43,6 +44,7 @@ const ArrowButton = styled.button`
 `;
 
 const MainRow = () => {
+    const { auth } = useAuth(); // useAuth 훅 사용
     const images1 = [
         { src: 'MainRowEx1.png', text: 'a' },
         { src: 'MainRowEx2.png', text: 'b' },
@@ -66,7 +68,9 @@ const MainRow = () => {
         <Container>
             <CustomColumn width='100%' alignItems='center' justifyContent='center'>
                 <CustomRow width='90%' alignItems='center' justifyContent='flex-start'>
-                    <CustomFont color='black' font='1.3rem' fontWeight='bold'>유저님을 위한 추천</CustomFont>
+                    <CustomFont color='black' font='1.3rem' fontWeight='bold'>
+                        {auth.nickname ? `${auth.nickname}님을 위한 추천` : '이런 건 어떠세요?'}
+                    </CustomFont>
                 </CustomRow>
                 <CustomRow width='100%' alignItems='center' justifyContent='center'>
                     {visibleImages.map((image, index) => (
