@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import CustomFont from '../../../Components/Container/CustomFont';
 import CustomRow from '../../../Components/Container/CustomRow';
@@ -55,6 +55,28 @@ const TeamLogo = styled.img`
   width: 50px;
   height: 50px;
   margin-right: 10px;
+`;
+
+const batMove = keyframes`
+  0%, 100% {
+    left: 20px;
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-30deg);
+  }
+  75% {
+    transform: rotate(30deg);
+  }
+  50% {
+    left: 30px;
+  }
+`;
+
+const Bat = styled.img`
+  width: 70px;
+  height: 70px;
+  animation: ${batMove} 0.5s linear infinite;
 `;
 
 const App = () => {
@@ -165,6 +187,7 @@ const App = () => {
                 </MatchContainer >
             ))}
             <CustomRow width='50%' alignItems='center' justifyContent='flex-end'>
+                <Bat src="icon_bat.png" />
                 <VoteButton onClick={handleVote}>
                     <CustomFont color='white' fontWeight='bold' font='1rem'>
                         투표하기
