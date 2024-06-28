@@ -83,6 +83,13 @@ margin: 10px;
 max-width: 150px;
 text-align: center;
 cursor: pointer;
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+    border-radius: 0.625rem;
+  }
 `;
 
 const ItemImage = styled.img`
