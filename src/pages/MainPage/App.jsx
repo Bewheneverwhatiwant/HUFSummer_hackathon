@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import styled, { keyframes } from 'styled-components';
+import MainCarousel from './MainCarousel';
 
 // 메인페이지
 
@@ -34,6 +35,7 @@ export default function App() {
       <PageContainer>
 
         HUFSummer
+        <MainCarousel />
       </PageContainer>
     </ContainerCenter>
   )
