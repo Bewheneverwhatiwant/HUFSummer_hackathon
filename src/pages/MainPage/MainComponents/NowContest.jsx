@@ -5,6 +5,7 @@ import CustomFont from '../../../Components/Container/CustomFont';
 import CustomRow from '../../../Components/Container/CustomRow';
 import CustomColumn from '../../../Components/Container/CustomColumn';
 import { useAuth } from '../../SubPage/AuthContext';
+import StyledImg from '../../../Components/Container/StyledImg';
 
 const Container = styled.div`
   display: flex;
@@ -128,7 +129,14 @@ const App = () => {
                                             <TeamLogo src={team.logoUrl} alt={`${team.name} logo`} />
                                             <CustomColumn alignItems='center'>
 
-                                                <div>{team.name} ({team.isHome ? 'H' : 'A'})</div>
+                                                <div>{team.name} ({team.isHome ?
+                                                    <>
+                                                        <CustomFont color='black' font='1rem' fontWeight='bold'>
+                                                            H
+                                                        </CustomFont>
+                                                        <StyledImg src={'icon_fire.png'} width='20px' height='20px' />
+                                                    </>
+                                                    : 'A'})</div>
                                                 <div>{team.vote}표</div>
                                             </CustomColumn>
                                         </CustomRow>
@@ -154,7 +162,7 @@ const App = () => {
                             )}
                         </CustomColumn>
                     </CustomRow>
-                </MatchContainer>
+                </MatchContainer >
             ))}
             <CustomRow width='50%' alignItems='center' justifyContent='flex-end'>
                 <VoteButton onClick={handleVote}>
@@ -163,7 +171,7 @@ const App = () => {
                     </CustomFont>
                 </VoteButton>
             </CustomRow>
-        </Container>
+        </Container >
     );
 };
 

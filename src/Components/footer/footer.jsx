@@ -8,8 +8,6 @@ import CustomFont from '../Container/CustomFont';
 import CustomColumn from '../Container/CustomColumn';
 import axios from 'axios';
 
-// 이 파일에서 회원탈퇴 API 연동하기 !! -> swagger 수정 후 400에러 해결해야함
-
 const FooterContainer = styled.footer`
   display: flex;
   flex-direction: column;
@@ -31,16 +29,16 @@ const WithdrawButton = styled.button`
   cursor: pointer;
 `;
 
-// 백엔드와 협의하여 수정하기
 export default function Footer() {
     const { auth, logout } = useAuth();
     const navigate = useNavigate();
 
     const withdraw = async () => {
         try {
+            const accessToken = localStorage.getItem('accessToken'); // localStorage에서 accessToken 가져오기
             const response = await axios.delete(`${import.meta.env.VITE_REACT_APP_SERVER}/auth/termination`, {
                 headers: {
-                    Authorization: `Bearer ${auth.accessToken}`
+                    Authorization: `Bearer ${accessToken}`
                 }
             });
             if (response.status === 200) {
