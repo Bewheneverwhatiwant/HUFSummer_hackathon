@@ -108,7 +108,7 @@ const GrassImg = styled.div`
 
 const CustomRowWithPosition = styled(CustomRow)`
   position: absolute;
-  bottom: 10px; /* 적절한 값을 설정해 맞추세요 */
+  bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
@@ -142,6 +142,50 @@ const BallIcon = styled.img`
   animation: ${moveBall} 5s linear infinite;
 `;
 
+const ParlContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 60vh;
+`;
+
+const ParlImg = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 70%;
+  background-image: url('parl.jpg');
+  background-size: 100% 100%;
+  z-index: 1;
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    z-index: 2;
+  }
+
+  &::before {
+    top: 0;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+  }
+
+  &::after {
+    bottom: 0;
+    background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+  }
+`;
+
+const ParlDonateContainer = styled.div`
+  width: 100%;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+`;
+
 export default function App() {
   const navigate = useNavigate();
 
@@ -168,7 +212,13 @@ export default function App() {
             <MostKindClub />
           </CustomRowWithPosition>
         </GrassContainer>
-        <DonateParl />
+
+        <ParlContainer>
+          <ParlImg />
+          <ParlDonateContainer>
+            <DonateParl />
+          </ParlDonateContainer>
+        </ParlContainer>
         <DonateThings />
       </PageContainer>
     </ContainerCenter>
