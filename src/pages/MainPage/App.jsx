@@ -3,7 +3,8 @@ import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import NowContest from '../MainPage/MainComponents/NowContest';
 import MissionDiv from '../MainPage/TodayMission/MissionDiv';
-
+import DonateParl from '../MainPage/MainComponents/DonateParl'
+import DonateThings from '../MainPage/MainComponents/DonateThings'
 // 메인페이지
 
 const ContainerCenter = styled.div`
@@ -43,6 +44,8 @@ export default function App() {
       <PageContainer>
         <MissionDiv />
         <NowContest />
+        <DonateParl />
+        <DonateThings />
 
       </PageContainer>
     </ContainerCenter>
