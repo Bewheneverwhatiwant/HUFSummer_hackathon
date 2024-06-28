@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import CustomFont from '../../../Components/Container/CustomFont';
 import CustomRow from '../../../Components/Container/CustomRow';
 import CustomColumn from '../../../Components/Container/CustomColumn';
+import { useAuth } from '../../SubPage/AuthContext';
 
 const Container = styled.div`
   display: flex;
@@ -48,15 +50,36 @@ const VoteButton = styled.button`
   border: none;
 `;
 
+const TeamLogo = styled.img`
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+`;
+
 const App = () => {
     const [selectedMatch, setSelectedMatch] = useState(null);
     const [selectedTeams, setSelectedTeams] = useState({});
+    const [matches, setMatches] = useState([]);
+    const { auth } = useAuth();  // useAuth 훅을 사용해서 auth 객체를 가져옴
 
-    const matches = [
-        { id: 1, team1: '팀 A', team2: '팀 B', votes1: 30, votes2: 15 },
-        { id: 2, team1: '팀 C', team2: '팀 D', votes1: 30, votes2: 15 },
-        { id: 3, team1: '팀 E', team2: '팀 F', votes1: 30, votes2: 15 },
-    ];
+    useEffect(() => {
+        const fetchMatches = async () => {
+            try {
+                const today = new Date().toISOString().split('T')[0]; // 오늘 날짜를 'YYYY-MM-DD' 형식으로 얻기
+                const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/game`, {
+                    params: { date: today },
+                    headers: {
+                        Authorization: `Bearer ${auth.accessToken}`
+                    }
+                });
+                setMatches(response.data.games);
+            } catch (error) {
+                console.error('경기 정보 가져오기 실패', error);
+            }
+        };
+
+        fetchMatches();
+    }, [auth.accessToken]);
 
     const handleMatchSelect = (matchId) => {
         if (selectedMatch === matchId) {
@@ -85,50 +108,43 @@ const App = () => {
             <CustomRow width='50%' alignItems='center' justifyContent='flex-start'>
                 <CustomFont color='black' font='1rem'>경기를 고르고 팀에게 투표하세요.</CustomFont>
             </CustomRow>
-            {matches.map((match) => (
+            {matches.map((match, matchIndex) => (
                 <MatchContainer
-                    key={match.id}
-                    selected={selectedMatch === match.id}
+                    key={matchIndex}
+                    selected={selectedMatch === matchIndex}
                 >
                     <CustomRow width='100%' alignItems='center' justifyContent='center'>
                         <Checkbox
                             type="checkbox"
-                            checked={selectedMatch === match.id}
-                            onChange={() => handleMatchSelect(match.id)}
+                            checked={selectedMatch === matchIndex}
+                            onChange={() => handleMatchSelect(matchIndex)}
                         />
                         <CustomColumn width='100%' alignItems='center' justifyContent='center'>
                             <CustomRow width='100%' alignItems='center' justifyContent='space-around' gap='1rem'>
-                                <div>
-                                    <div>{match.team1}</div>
-                                    <div>{match.votes1}표</div>
-                                </div>
-                                <div>VS</div>
-                                <div>
-                                    <div>{match.team2}</div>
-                                    <div>{match.votes2}표</div>
-                                </div>
+                                {match.teams.map((team, teamIndex) => (
+                                    <div key={teamIndex}>
+                                        <CustomRow alignItems='center'>
+                                            <TeamLogo src={team.logoUrl} alt={`${team.name} logo`} />
+                                            <div>{team.name} ({team.isHome ? 'H' : 'A'})</div>
+                                        </CustomRow>
+                                        <div>{team.vote}표</div>
+                                    </div>
+                                ))}
                             </CustomRow>
-                            {selectedMatch === match.id && (
+                            {selectedMatch === matchIndex && (
                                 <TeamContainer>
                                     <CustomRow width='100%' alignItems='center' justifyContent='center' gap='1rem'>
-                                        <div>
-                                            <RadioButton
-                                                type="radio"
-                                                name={`team-${match.id}`}
-                                                checked={selectedTeams[match.id] === match.team1}
-                                                onChange={() => handleTeamSelect(match.id, match.team1)}
-                                            />
-                                            <label>{match.team1}</label>
-                                        </div>
-                                        <div>
-                                            <RadioButton
-                                                type="radio"
-                                                name={`team-${match.id}`}
-                                                checked={selectedTeams[match.id] === match.team2}
-                                                onChange={() => handleTeamSelect(match.id, match.team2)}
-                                            />
-                                            <label>{match.team2}</label>
-                                        </div>
+                                        {match.teams.map((team, teamIndex) => (
+                                            <div key={teamIndex}>
+                                                <RadioButton
+                                                    type="radio"
+                                                    name={`team-${matchIndex}`}
+                                                    checked={selectedTeams[matchIndex] === team.name}
+                                                    onChange={() => handleTeamSelect(matchIndex, team.name)}
+                                                />
+                                                <label>{team.name} ({team.isHome ? 'H' : 'A'})</label>
+                                            </div>
+                                        ))}
                                     </CustomRow>
                                 </TeamContainer>
                             )}
