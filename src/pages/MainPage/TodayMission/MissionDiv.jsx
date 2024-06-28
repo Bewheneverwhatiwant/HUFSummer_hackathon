@@ -1,6 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-import StyledImg from '../../../Components/Container/StyledImg';
+import styled, { keyframes } from 'styled-components';
 import CustomFont from '../../../Components/Container/CustomFont';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,6 +23,15 @@ const Description = styled.p`
   margin: 10px 0;
 `;
 
+const moveUpDown = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+`;
+
 const MissionContainer = styled.button`
   position: relative;
   width: 50%;
@@ -37,6 +45,7 @@ const MissionContainer = styled.button`
   border-radius: 50px;
   border: 2px solid black;
   cursor: pointer;
+  animation: ${moveUpDown} 1s infinite;
 `;
 
 const IconImage = styled.img`
