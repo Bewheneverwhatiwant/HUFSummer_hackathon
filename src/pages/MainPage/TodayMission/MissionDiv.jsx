@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
+import axios from 'axios';
 import CustomFont from '../../../Components/Container/CustomFont';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../SubPage/AuthContext';
 
 const Container = styled.div`
   display: flex;
@@ -57,7 +59,38 @@ const IconImage = styled.img`
 `;
 
 const App = () => {
+    const [missionContent, setMissionContent] = useState('');
     const navigate = useNavigate();
+
+    const { auth } = useAuth();  // useAuth 훅을 사용해서 auth 객체를 가져옴
+
+    useEffect(() => {
+        const fetchMission = async () => {
+            try {
+                const accessToken = localStorage.getItem('accessToken');
+                const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/missions/today`, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                });
+                if (response.status === 200) {
+                    setMissionContent(response.data.content);
+                }
+            } catch (error) {
+                console.error('미션 로딩 실패', error);
+            }
+        };
+
+        if (auth.isLoggedIn) {
+            fetchMission();
+            const intervalId = setInterval(fetchMission, 60000); // 60초마다 fetchMission 호출
+
+            return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
+        } else {
+            setMissionContent('로그인 먼저 해주세요.');
+        }
+    }, [auth.isLoggedIn]);
+
 
     const camera = () => {
         navigate('/camera');
@@ -73,7 +106,7 @@ const App = () => {
             </Description>
             <MissionContainer onClick={camera}>
                 <CustomFont color='black' fontWeight='bold' font='2rem'>오늘의 미션</CustomFont>
-                <CustomFont color='black' font='1.5rem'>페트병 3개를 주워 버리세요!</CustomFont>
+                <CustomFont color='black' font='1.5rem'>{missionContent}</CustomFont>
                 <IconImage src='icon_click.png' />
             </MissionContainer>
         </Container>
