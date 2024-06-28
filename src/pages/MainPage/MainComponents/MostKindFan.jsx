@@ -100,6 +100,7 @@ const App = () => {
                     <ClubRow key={index}>
                         <ClubNumber>{fan.rank}</ClubNumber>
                         <ClubImage src={fan.logoUrl} alt={`fan-${fan.rank}-logo`} />
+                        <ClubText>{fan.nickname}님</ClubText>
                         <ClubText>미션 달성 {fan.completeMission}번</ClubText>
                         <ClubText>누적 투표 {fan.totalVote}번</ClubText>
                     </ClubRow>
