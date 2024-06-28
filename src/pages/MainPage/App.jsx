@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import NowContest from '../MainPage/MainComponents/NowContest';
 import MissionDiv from '../MainPage/TodayMission/MissionDiv';
@@ -52,12 +52,31 @@ const TopImg = styled.div`
 `;
 
 const MissionDivContainer = styled.div`
-width: 100%;
+  width: 100%;
   position: absolute;
   top: 55%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
+`;
+
+const moveBall = keyframes`
+  0% {
+    top: 10%;
+    right: 30%;
+  }
+  100% {
+    top: -90%;
+    right: 90%;
+  }
+`;
+
+const BallIcon = styled.img`
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  z-index: 3;
+  animation: ${moveBall} 5s linear infinite;
 `;
 
 export default function App() {
@@ -74,6 +93,7 @@ export default function App() {
           <TopImg />
           <MissionDivContainer>
             <MissionDiv />
+            <BallIcon src="icon_ball.png" />
           </MissionDivContainer>
         </TopImgContainer>
         <NowContest />
