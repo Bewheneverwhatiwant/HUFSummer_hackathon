@@ -35,9 +35,7 @@ export default function App() {
 
     <ContainerCenter>
       <PageContainer>
-        <MainCarousel />
-        <MainTab />
-        <MainRow />
+        <button>미션 수행 Modal</button>
       </PageContainer>
     </ContainerCenter>
   )
