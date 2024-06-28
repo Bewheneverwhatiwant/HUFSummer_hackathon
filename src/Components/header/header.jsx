@@ -58,10 +58,11 @@ export default function Header() {
     useEffect(() => {
         if (auth.isLoggedIn) {
             const fetchUserInfo = async () => {
+                const accessToken = localStorage.getItem('accessToken');
                 try {
                     const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/my`, {
                         headers: {
-                            Authorization: `Bearer ${auth.accessToken}`
+                            Authorization: `Bearer ${accessToken}`
                         }
                     });
                     setNickname(response.data.nickname);
@@ -73,7 +74,7 @@ export default function Header() {
 
             fetchUserInfo();
         }
-    }, [auth.isLoggedIn, auth.accessToken]);
+    }, [auth.isLoggedIn]);
 
     const mypage = () => {
         navigate('/mypage');
