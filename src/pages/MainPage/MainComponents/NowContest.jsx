@@ -119,9 +119,28 @@ const App = () => {
         setSelectedTeams({ ...selectedTeams, [matchId]: team });
     };
 
-    const handleVote = () => {
-        console.log('Selected Match:', selectedMatch);
-        console.log('Selected Teams:', selectedTeams);
+    const handleVote = async () => {
+        try {
+            if (selectedMatch !== null && selectedTeams[selectedMatch]) {
+                const match = matches[selectedMatch];
+                const selectedTeam = match.teams.find(team => team.name === selectedTeams[selectedMatch]);
+                const accessToken = localStorage.getItem('accessToken'); // localStorage에서 accessToken 가져오기
+
+                if (selectedTeam) {
+                    const response = await axios.post(`${import.meta.env.VITE_REACT_APP_SERVER}/bet/${match.gameId}/${selectedTeam.teamId}`, {}, {
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        }
+                    });
+
+                    if (response.status === 200) {
+                        alert('투표가 성공적으로 완료되었습니다.');
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('투표 중 오류 발생', error);
+        }
     };
 
     return (
