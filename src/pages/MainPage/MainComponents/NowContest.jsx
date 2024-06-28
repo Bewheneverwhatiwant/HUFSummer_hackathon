@@ -14,9 +14,10 @@ const Container = styled.div`
 `;
 
 const MatchContainer = styled.div`
-  width: 70%;
+  width: 30%;
+  min-height: 2rem;
   background-color: #f2f2f2;
-  padding: 10px;
+  padding: 30px;
   margin: 10px 0;
   border-radius: 10px;
   border: ${(props) => (props.selected ? '2px solid blue' : '1px solid #ccc')};
@@ -43,6 +44,9 @@ const VoteButton = styled.button`
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+  background-color: #54B3FF;
+  border-radius: 10px;
+  border: none;
 `;
 
 const App = () => {
@@ -56,8 +60,13 @@ const App = () => {
     ];
 
     const handleMatchSelect = (matchId) => {
-        setSelectedMatch(matchId);
-        setSelectedTeams({});
+        if (selectedMatch === matchId) {
+            setSelectedMatch(null);
+            setSelectedTeams({});
+        } else {
+            setSelectedMatch(matchId);
+            setSelectedTeams({});
+        }
     };
 
     const handleTeamSelect = (matchId, team) => {
@@ -71,8 +80,11 @@ const App = () => {
 
     return (
         <Container>
-            <CustomRow width='70%' alignItems='center' justifyContent='flex-start'>
-                <CustomFont color='black' font='1rem'>지금 경기는?</CustomFont>
+            <CustomRow width='30%' alignItems='center' justifyContent='flex-start'>
+                <CustomFont color='black' font='1.5rem' fontWeight='bold'>지금 경기는?</CustomFont>
+            </CustomRow>
+            <CustomRow width='30%' alignItems='center' justifyContent='flex-start'>
+                <CustomFont color='black' font='1rem'>경기를 고르고 팀에게 투표하세요.</CustomFont>
             </CustomRow>
             {matches.map((match) => (
                 <MatchContainer
@@ -86,7 +98,7 @@ const App = () => {
                             onChange={() => handleMatchSelect(match.id)}
                         />
                         <CustomColumn width='100%' alignItems='center' justifyContent='center'>
-                            <CustomRow width='100%' alignItems='center' justifyContent='center'>
+                            <CustomRow width='100%' alignItems='center' justifyContent='center' gap='1rem'>
                                 <div>
                                     <div>{match.team1}</div>
                                     <div>{match.votes1}표</div>
@@ -99,32 +111,38 @@ const App = () => {
                             </CustomRow>
                             {selectedMatch === match.id && (
                                 <TeamContainer>
-                                    <div>
-                                        <RadioButton
-                                            type="radio"
-                                            name={`team-${match.id}`}
-                                            checked={selectedTeams[match.id] === match.team1}
-                                            onChange={() => handleTeamSelect(match.id, match.team1)}
-                                        />
-                                        <label>{match.team1}</label>
-                                    </div>
-                                    <div>
-                                        <RadioButton
-                                            type="radio"
-                                            name={`team-${match.id}`}
-                                            checked={selectedTeams[match.id] === match.team2}
-                                            onChange={() => handleTeamSelect(match.id, match.team2)}
-                                        />
-                                        <label>{match.team2}</label>
-                                    </div>
+                                    <CustomRow width='100%' alignItems='center' justifyContent='center' gap='1rem'>
+                                        <div>
+                                            <RadioButton
+                                                type="radio"
+                                                name={`team-${match.id}`}
+                                                checked={selectedTeams[match.id] === match.team1}
+                                                onChange={() => handleTeamSelect(match.id, match.team1)}
+                                            />
+                                            <label>{match.team1}</label>
+                                        </div>
+                                        <div>
+                                            <RadioButton
+                                                type="radio"
+                                                name={`team-${match.id}`}
+                                                checked={selectedTeams[match.id] === match.team2}
+                                                onChange={() => handleTeamSelect(match.id, match.team2)}
+                                            />
+                                            <label>{match.team2}</label>
+                                        </div>
+                                    </CustomRow>
                                 </TeamContainer>
                             )}
                         </CustomColumn>
                     </CustomRow>
                 </MatchContainer>
             ))}
-            <CustomRow width='70%' alignItems='center' justifyContent='flex-start'>
-                <VoteButton onClick={handleVote}>투표하기</VoteButton>
+            <CustomRow width='30%' alignItems='center' justifyContent='flex-end'>
+                <VoteButton onClick={handleVote}>
+                    <CustomFont color='white' fontWeight='bold' font='1rem'>
+                        투표하기
+                    </CustomFont>
+                </VoteButton>
             </CustomRow>
         </Container>
     );
