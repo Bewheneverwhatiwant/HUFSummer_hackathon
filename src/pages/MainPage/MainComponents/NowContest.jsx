@@ -119,29 +119,77 @@ const App = () => {
         setSelectedTeams({ ...selectedTeams, [matchId]: team });
     };
 
+    // const handleVote = async () => {
+    //     try {
+    //         if (selectedMatch !== null && selectedTeams[selectedMatch]) {
+    //             const match = matches[selectedMatch];
+    //             const selectedTeam = match.teams.find(team => team.name === selectedTeams[selectedMatch]);
+    //             const accessToken = localStorage.getItem('accessToken'); // localStorage에서 accessToken 가져오기
+
+    //             if (selectedTeam) {
+    //                 const response = await axios.post(`${import.meta.env.VITE_REACT_APP_SERVER}/bet`, null, {
+    //                     params: {
+    //                         baseballGameId: match.gameId,
+    //                         teamId: selectedTeam.teamId
+    //                     },
+    //                     headers: {
+    //                         Authorization: `Bearer ${accessToken}`
+    //                     }
+    //                 });
+
+    //                 console.log('teamId:', selectedTeam.teamId);
+    //                 console.log('gameId:', match.gameId);
+
+    //                 if (response.status === 200) {
+    //                     alert('투표가 성공적으로 완료되었습니다.');
+    //                 }
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.error('투표 중 오류 발생', error);
+    //         if (selectedMatch !== null && selectedTeams[selectedMatch]) {
+    //             const match = matches[selectedMatch];
+    //             const selectedTeam = match.teams.find(team => team.name === selectedTeams[selectedMatch]);
+    //             if (selectedTeam) {
+    //                 console.log('teamId:', selectedTeam.teamId);
+    //                 console.log('gameId:', match.gameId);
+    //             }
+    //         }
+    //     }
+    // };
+
+
+    // 테스트코드
     const handleVote = async () => {
         try {
-            if (selectedMatch !== null && selectedTeams[selectedMatch]) {
-                const match = matches[selectedMatch];
-                const selectedTeam = match.teams.find(team => team.name === selectedTeams[selectedMatch]);
-                const accessToken = localStorage.getItem('accessToken'); // localStorage에서 accessToken 가져오기
+            const teamId = 6;
+            const gameId = 6;
 
-                if (selectedTeam) {
-                    const response = await axios.post(`${import.meta.env.VITE_REACT_APP_SERVER}/bet/${match.gameId}/${selectedTeam.teamId}`, {}, {
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`
-                        }
-                    });
+            const accessToken = localStorage.getItem('accessToken'); // localStorage에서 accessToken 가져오기
 
-                    if (response.status === 200) {
-                        alert('투표가 성공적으로 완료되었습니다.');
-                    }
+            const response = await axios.post(`${import.meta.env.VITE_REACT_APP_SERVER}/bet`, null, {
+                params: {
+                    baseballGameId: gameId,
+                    teamId: teamId
+                },
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
                 }
+            });
+
+            console.log('teamId:', teamId);
+            console.log('gameId:', gameId);
+
+            if (response.status === 200) {
+                alert('투표가 성공적으로 완료되었습니다.');
             }
         } catch (error) {
             console.error('투표 중 오류 발생', error);
+            console.log('teamId:', 6);
+            console.log('gameId:', 6);
         }
     };
+
 
     return (
         <Container>

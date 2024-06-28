@@ -1,6 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-// import CustomModal from '../../../Components/Container/CustomModal';
 import CustomColumn from '../../../Components/Container/CustomColumn';
 import CustomRow from '../../../Components/Container/CustomRow';
 import CustomFont from '../../../Components/Container/CustomFont';
@@ -35,12 +34,14 @@ const ModalOverlay = styled.div`
   align-items: center;
 `;
 
-const App = () => {
-
+const FailModal = ({ setCapturedImage, setIsFail }) => {
     const navigate = useNavigate();
 
     const camera = () => {
+        setCapturedImage(null);
+        setIsFail(false);
         navigate('/camera');
+        console.log('재촬영 버튼 클릭');
     };
 
     return (
@@ -62,4 +63,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default FailModal;

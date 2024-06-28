@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import Webcam from 'react-webcam';
 import SuccessModal from './SuccessModal';
 import FailModal from './FailModal';
@@ -82,19 +83,32 @@ const App = () => {
         setCapturedImage(imageSrc);
     };
 
-    const retakeImage = () => {
-        setCapturedImage(null);
-    };
-
-    // 이미지 업로드 함수
-    // 이미지 업로드 성공 시 SuccessModal이 true, 이미지 업로드 실패 시 FailModal이 true가 되도록!
-    // gpt api 연동 후 처리하기
-    const uploadImage = () => {
+    const uploadImage = async () => {
         setIsLoading(true);
-        setTimeout(() => {
+        const formData = new FormData();
+        const missionId = 4; // 절대 고치지 말것
+        formData.append('image', capturedImage);
+
+        try {
+            const accessToken = localStorage.getItem('accessToken'); // localStorage에서 accessToken 가져오기
+            const response = await axios.post(`${import.meta.env.VITE_REACT_APP_SERVER}/missions/${missionId}/completed`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+
             setIsLoading(false);
-            setIsSuccess(true);
-        }, 3000); // 3초 후에 isLoading을 false로 설정하고 isSuccess를 true로 설정
+            if (response.data.isCompleted) {
+                setIsSuccess(true);
+            } else {
+                setIsFail(true);
+            }
+        } catch (error) {
+            console.error('이미지 업로드 중 오류 발생', error);
+            setIsLoading(false);
+            setIsFail(true);
+        }
     };
 
     return (
@@ -103,7 +117,7 @@ const App = () => {
                 {!capturedImage ? (
                     <>
                         <CustomFont color='black' font='1.5rem' fontWeight='bold'>미션을 수행한 후 인증샷을 업로드하세요.</CustomFont>
-                        <CustomFont color='black' font='1rem' >미션 목표물이 잘 보이도록 촬영해주세요.</CustomFont>
+                        <CustomFont color='black' font='1rem'>미션 목표물이 잘 보이도록 촬영해주세요.</CustomFont>
                         <WebcamContainer>
                             <Webcam
                                 audio={false}
@@ -124,7 +138,7 @@ const App = () => {
                             <ActionButton onClick={uploadImage}>
                                 <CustomFont color='black' font='1rem' fontWeight='bold'>업로드</CustomFont>
                             </ActionButton>
-                            <ActionButton onClick={retakeImage}>
+                            <ActionButton onClick={() => setCapturedImage(null)}>
                                 <CustomFont color='black' font='1rem' fontWeight='bold'>재촬영</CustomFont>
                             </ActionButton>
                         </ButtonContainer>
@@ -132,7 +146,7 @@ const App = () => {
                 )}
                 {isLoading && <LoadingModal />}
                 {isSuccess && <SuccessModal />}
-                {isFail && <FailModal />}
+                {isFail && <FailModal setCapturedImage={setCapturedImage} setIsFail={setIsFail} />}
             </PageContainer>
         </ContainerCenter>
     );
