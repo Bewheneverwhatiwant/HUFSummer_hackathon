@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import NowContest from '../MainPage/MainComponents/NowContest';
 
 // 메인페이지
 
@@ -40,6 +41,9 @@ export default function App() {
     <ContainerCenter>
       <PageContainer>
         <button onClick={camera}>미션 수행 Modal</button>
+
+        <NowContest />
+
       </PageContainer>
     </ContainerCenter>
   )
