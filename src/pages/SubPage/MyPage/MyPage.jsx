@@ -149,9 +149,7 @@ const items = ["KT", "기아", "롯데", "LG", "NC", "SK", "삼성", "한화", "
 
 export default function App() {
   const { auth } = useAuth();
-  const [profileImage, setProfileImage] = useState(null);
-  const [preview, setPreview] = useState('icon_normalProfile.png'); // 기본 이미지
-  const [isButtonVisible, setIsButtonVisible] = useState(false);
+  const [preview, setPreview] = useState('icon_normalProfile.png');
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedItem, setSelectedItem] = useState("Select Team");
@@ -167,19 +165,21 @@ export default function App() {
   // 유저 정보 요청 시작
   useEffect(() => {
     const fetchUserInfo = async () => {
+      const accessToken = localStorage.getItem('accessToken');
       try {
         const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/my`, {
           headers: {
-            Authorization: `Bearer ${auth.accessToken}`
+            Authorization: `Bearer ${accessToken}`
           }
         });
         setUserInfo(response.data);
         console.log('유저 정보 가져오기 성공!');
+        console.log('Access Token:', accessToken);
 
         // 유저 정보 가져온 후 승률 API 호출
         axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/my/winningrate`, {
           headers: {
-            Authorization: `Bearer ${auth.accessToken}`
+            Authorization: `Bearer ${accessToken}`
           }
         })
           .then((response) => {
@@ -192,11 +192,13 @@ export default function App() {
 
       } catch (error) {
         console.error('유저 정보 가져오기 실패', error);
+        console.log('Access Token:', accessToken);
       }
     };
 
     fetchUserInfo();
-  }, [auth.accessToken]);
+  }, []);
+
 
 
   const toggleDropdown = () => {
@@ -214,30 +216,6 @@ export default function App() {
       setProfileImage(file);
       setPreview(URL.createObjectURL(file));
       setIsButtonVisible(true);
-    }
-  };
-
-  const handleProfileUpdate = async () => {
-    if (profileImage) {
-      const formData = new FormData();
-      formData.append('profileImage', profileImage);
-
-      try {
-        const response = await axios.patch(`${import.meta.env.VITE_REACT_APP_SERVER}/my/profileimage`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        });
-        console.log('프로필 사진 변경 성공', response.data);
-      } catch (error) {
-        console.error('프로필 사진 변경 실패', error);
-      }
-    }
-  };
-
-  const handleButtonClick = () => {
-    if (window.confirm('프로필 사진을 변경하시겠습니까?')) {
-      handleProfileUpdate();
     }
   };
 

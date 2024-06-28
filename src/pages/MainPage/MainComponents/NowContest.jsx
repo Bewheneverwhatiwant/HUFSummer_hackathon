@@ -66,10 +66,11 @@ const App = () => {
         const fetchMatches = async () => {
             try {
                 const today = new Date().toISOString().split('T')[0]; // 오늘 날짜를 'YYYY-MM-DD' 형식으로 얻기
+                const accessToken = localStorage.getItem('accessToken'); // localStorage에서 accessToken 가져오기
                 const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/game`, {
                     params: { date: today },
                     headers: {
-                        Authorization: `Bearer ${auth.accessToken}`
+                        Authorization: `Bearer ${accessToken}`
                     }
                 });
                 setMatches(response.data.games);
@@ -79,7 +80,7 @@ const App = () => {
         };
 
         fetchMatches();
-    }, [auth.accessToken]);
+    }, []);
 
     const handleMatchSelect = (matchId) => {
         if (selectedMatch === matchId) {
@@ -123,11 +124,14 @@ const App = () => {
                             <CustomRow width='100%' alignItems='center' justifyContent='space-around' gap='1rem'>
                                 {match.teams.map((team, teamIndex) => (
                                     <div key={teamIndex}>
-                                        <CustomRow alignItems='center'>
+                                        <CustomRow>
                                             <TeamLogo src={team.logoUrl} alt={`${team.name} logo`} />
-                                            <div>{team.name} ({team.isHome ? 'H' : 'A'})</div>
+                                            <CustomColumn alignItems='center'>
+
+                                                <div>{team.name} ({team.isHome ? 'H' : 'A'})</div>
+                                                <div>{team.vote}표</div>
+                                            </CustomColumn>
                                         </CustomRow>
-                                        <div>{team.vote}표</div>
                                     </div>
                                 ))}
                             </CustomRow>
