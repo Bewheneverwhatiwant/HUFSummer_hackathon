@@ -32,6 +32,8 @@ const PageContainer = styled(ContainerCenter)`
   background-size: 100% 100%;
 `;
 
+// Camera와 NowContest에서 버튼 클릭 시 로그인 검사 후 로그인하라고 안내하는 기능 추가하기 !!
+
 export default function App() {
 
   const navigate = useNavigate();

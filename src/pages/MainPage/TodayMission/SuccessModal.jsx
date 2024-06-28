@@ -4,6 +4,7 @@ import CustomFont from '../../../Components/Container/CustomFont';
 import CustomColumn from '../../../Components/Container/CustomColumn';
 import CustomRow from '../../../Components/Container/CustomRow';
 import StyledImg from '../../../Components/Container/StyledImg';
+import { useNavigate } from 'react-router-dom';
 
 const CustomModal = styled.div`
   width: 50%;
@@ -33,7 +34,14 @@ const ModalOverlay = styled.div`
   align-items: center;
 `;
 
-const SuccessModal = ({ onClose }) => {
+const SuccessModal = () => {
+
+    const navigate = useNavigate();
+
+    const mypage = () => {
+        navigate('/mypage');
+    };
+
     return (
         <>
             <ModalOverlay />
@@ -47,7 +55,7 @@ const SuccessModal = ({ onClose }) => {
                             <CustomFont color='black' fontWeight='bold' font='2rem'>+ 100</CustomFont>
                         </CustomColumn>
                     </CustomRow>
-                    <button onClick={onClose}>확인</button>
+                    <button onClick={mypage}>확인</button>
                 </CustomColumn>
             </CustomModal>
         </>

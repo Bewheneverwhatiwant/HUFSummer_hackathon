@@ -1,8 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Webcam from 'react-webcam';
 import SuccessModal from './SuccessModal';
 import FailModal from './FailModal';
+import LoadingModal from './LoadingModal';
+import CustomFont from '../../../Components/Container/CustomFont';
 
 const ContainerCenter = styled.div`
   display: flex;
@@ -94,6 +96,7 @@ const App = () => {
     const [capturedImage, setCapturedImage] = useState(null);
     const [isSuccess, setIsSuccess] = useState(false); // 이미지 업로드 성공 시 Modal
     const [isFail, setIsFail] = useState(false); // 이미지 업로드 실패 시 Modal
+    const [isLoading, setIsLoading] = useState(false);
 
     const captureImage = () => {
         const imageSrc = webcamRef.current.getScreenshot();
@@ -111,26 +114,23 @@ const App = () => {
         setIsSuccess(true);
     };
 
-
-    // 이미지 업로드 성공 시 Modal 닫기
-    const handleClose = () => {
-        setIsSuccess(false);
-    };
-
     return (
         <ContainerCenter>
             <PageContainer>
                 {!capturedImage ? (
-                    <WebcamContainer>
-                        <Webcam
-                            audio={false}
-                            ref={webcamRef}
-                            screenshotFormat="image/jpeg"
-                            width={640}
-                            height={480}
-                        />
-                        <CaptureButton onClick={captureImage}>사진 촬영</CaptureButton>
-                    </WebcamContainer>
+                    <>
+                        <CustomFont color='black' font='1rem' fontWeight='bold'>미션을 수행한 후 인증샷을 업로드하세요.</CustomFont>
+                        <WebcamContainer>
+                            <Webcam
+                                audio={false}
+                                ref={webcamRef}
+                                screenshotFormat="image/jpeg"
+                                width={640}
+                                height={480}
+                            />
+                            <CaptureButton onClick={captureImage}>사진 촬영</CaptureButton>
+                        </WebcamContainer>
+                    </>
                 ) : (
                     <CapturedImageContainer>
                         <CapturedImage src={capturedImage} alt="Captured" />
@@ -141,10 +141,13 @@ const App = () => {
                     </CapturedImageContainer>
                 )}
                 {isSuccess && (
-                    <SuccessModal onClose={handleClose} />
+                    <SuccessModal />
                 )}
                 {isFail && (
                     <FailModal />
+                )}
+                {isLoading && (
+                    <LoadingModal />
                 )}
             </PageContainer>
         </ContainerCenter>
