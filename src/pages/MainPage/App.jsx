@@ -7,6 +7,8 @@ import MostKindClub from '../MainPage/MainComponents/MostKindClub';
 import MostKindFan from '../MainPage/MainComponents/MostKindFan';
 import CustomRow from '../../Components/Container/CustomRow';
 
+import DonateParl from '../MainPage/MainComponents/DonateParl'
+import DonateThings from '../MainPage/MainComponents/DonateThings'
 // 메인페이지
 
 const ContainerCenter = styled.div`
@@ -52,6 +54,8 @@ export default function App() {
           <MostKindClub />
           <MostKindFan />
         </CustomRow>
+        <DonateParl />
+        <DonateThings />
 
       </PageContainer>
     </ContainerCenter>
