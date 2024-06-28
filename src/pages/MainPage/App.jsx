@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import styled, { keyframes } from 'styled-components';
-import MainCarousel from './MainCarousel';
-import MainTab from './MainTab';
-import MainRow from './MainRow';
+import { useNavigate } from 'react-router-dom';
 
 // 메인페이지
 
@@ -31,11 +29,17 @@ const PageContainer = styled(ContainerCenter)`
 
 export default function App() {
 
+  const navigate = useNavigate();
+
+  const camera = () => {
+    navigate('/camera');
+  };
+
   return (
 
     <ContainerCenter>
       <PageContainer>
-        <button>미션 수행 Modal</button>
+        <button onClick={camera}>미션 수행 Modal</button>
       </PageContainer>
     </ContainerCenter>
   )

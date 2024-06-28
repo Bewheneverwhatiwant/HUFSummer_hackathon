@@ -6,6 +6,7 @@ import MyPage from './pages/SubPage/MyPage/MyPage';
 import ScrollToTop from './Components/ScrollToTop';
 import { AuthProvider } from './pages/SubPage/AuthContext';
 import { isMobile, isTablet } from 'react-device-detect';
+import Camera from './pages/MainPage/TodayMission/Camera';
 
 // 라우터 파일
 
@@ -28,6 +29,7 @@ const AppRouter = () => {
                     <Routes>
                         <Route path="/" element={<App />} />
                         <Route path="/mypage" element={<MyPage />} />
+                        <Route path="/camera" element={<Camera />} />
                     </Routes>
                 </Layout>
             </Router>
