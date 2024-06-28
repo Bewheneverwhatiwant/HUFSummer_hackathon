@@ -25,6 +25,7 @@ const Description = styled.p`
 `;
 
 const MissionContainer = styled.button`
+  position: relative;
   width: 50%;
   min-height: 2rem;
   display: flex;
@@ -33,13 +34,20 @@ const MissionContainer = styled.button`
   justify-content: center;
   padding: 20px;
   margin: 20px 0;
-  border-radius: 20px;
-  border: 1px solid black;
+  border-radius: 50px;
+  border: 2px solid black;
   cursor: pointer;
 `;
 
-const App = () => {
+const IconImage = styled.img`
+  position: absolute;
+  bottom: -50px;
+  right: -20px;
+  width: 100px;
+  height: 100px;
+`;
 
+const App = () => {
     const navigate = useNavigate();
 
     const camera = () => {
@@ -57,6 +65,7 @@ const App = () => {
             <MissionContainer onClick={camera}>
                 <CustomFont color='black' fontWeight='bold' font='2rem'>오늘의 미션</CustomFont>
                 <CustomFont color='black' font='1.5rem'>페트병 3개를 주워 버리세요!</CustomFont>
+                <IconImage src='icon_click.png' />
             </MissionContainer>
         </Container>
     );

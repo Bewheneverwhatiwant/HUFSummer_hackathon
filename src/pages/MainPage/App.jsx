@@ -3,6 +3,9 @@ import styled, { keyframes } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import NowContest from '../MainPage/MainComponents/NowContest';
 import MissionDiv from '../MainPage/TodayMission/MissionDiv';
+import MostKindClub from '../MainPage/MainComponents/MostKindClub';
+import MostKindFan from '../MainPage/MainComponents/MostKindFan';
+import CustomRow from '../../Components/Container/CustomRow';
 
 // 메인페이지
 
@@ -43,6 +46,10 @@ export default function App() {
       <PageContainer>
         <MissionDiv />
         <NowContest />
+        <CustomRow width='70%' alignItems='flex-start' justifyContent='center'>
+          <MostKindClub />
+          <MostKindFan />
+        </CustomRow>
 
       </PageContainer>
     </ContainerCenter>

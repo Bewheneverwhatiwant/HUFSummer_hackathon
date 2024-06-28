@@ -10,11 +10,10 @@ const Container = styled.div`
   align-items: center;
   gap: 10px;
   width: 100%;
-  min-height: 100vh;
 `;
 
 const MatchContainer = styled.div`
-  width: 30%;
+  width: 50%;
   min-height: 2rem;
   background-color: #f2f2f2;
   padding: 30px;
@@ -80,10 +79,10 @@ const App = () => {
 
     return (
         <Container>
-            <CustomRow width='30%' alignItems='center' justifyContent='flex-start'>
+            <CustomRow width='50%' alignItems='center' justifyContent='flex-start'>
                 <CustomFont color='black' font='1.5rem' fontWeight='bold'>지금 경기는?</CustomFont>
             </CustomRow>
-            <CustomRow width='30%' alignItems='center' justifyContent='flex-start'>
+            <CustomRow width='50%' alignItems='center' justifyContent='flex-start'>
                 <CustomFont color='black' font='1rem'>경기를 고르고 팀에게 투표하세요.</CustomFont>
             </CustomRow>
             {matches.map((match) => (
@@ -98,7 +97,7 @@ const App = () => {
                             onChange={() => handleMatchSelect(match.id)}
                         />
                         <CustomColumn width='100%' alignItems='center' justifyContent='center'>
-                            <CustomRow width='100%' alignItems='center' justifyContent='center' gap='1rem'>
+                            <CustomRow width='100%' alignItems='center' justifyContent='space-around' gap='1rem'>
                                 <div>
                                     <div>{match.team1}</div>
                                     <div>{match.votes1}표</div>
@@ -137,7 +136,7 @@ const App = () => {
                     </CustomRow>
                 </MatchContainer>
             ))}
-            <CustomRow width='30%' alignItems='center' justifyContent='flex-end'>
+            <CustomRow width='50%' alignItems='center' justifyContent='flex-end'>
                 <VoteButton onClick={handleVote}>
                     <CustomFont color='white' fontWeight='bold' font='1rem'>
                         투표하기
