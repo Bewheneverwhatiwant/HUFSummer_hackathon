@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import CustomRow from '../../../Components/Container/CustomRow';
 import CustomFont from '../../../Components/Container/CustomFont';
 import CustomColumn from '../../../Components/Container/CustomColumn';
@@ -36,58 +37,56 @@ const DonateBox = styled.div`
     border-radius: 10px;
     border: 1px solid #ccc;
     padding: 50px;
-    
-
 `;
 
 export default function DonateParl() {
-    const DanateList = [
-        { 'number': '1', 'Teamlogo': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgAQohBsdddPU6aJvkMmqVlSl5HMEs4wqpAQrtSGwCvXn4HsJcH7rrawGVpUxNckFj698&usqp=CAU', 'points': '100' },
-        { 'number': '2', 'Teamlogo': 'https://i.namu.wiki/i/nhKvnqKXbs7dbPMggKos010RqfYHxUoKgd4GOPjaN8HICce5HXZo6_zAQJPO8SNd-tMEthvTehq7ef-jzuRoww.svg', 'points': '50' },
-        { 'number': '3', 'Teamlogo': 'https://heroesbaseball.co.kr/html/front/web_2018/images/heroes/imgEmblem14.jpg', 'points': '100' },
-        { 'number': '4', 'Teamlogo': 'https://www.mediapia.co.kr/news/photo/202010/45766_74518_1044.png', 'points': '180' },
-        { 'number': '5', 'Teamlogo': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgAQohBsdddPU6aJvkMmqVlSl5HMEs4wqpAQrtSGwCvXn4HsJcH7rrawGVpUxNckFj698&usqp=CAU', 'points': '80' },
-        { 'number': '6', 'Teamlogo': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgAQohBsdddPU6aJvkMmqVlSl5HMEs4wqpAQrtSGwCvXn4HsJcH7rrawGVpUxNckFj698&usqp=CAU', 'points': '10' },
-        { 'number': '7', 'Teamlogo': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgAQohBsdddPU6aJvkMmqVlSl5HMEs4wqpAQrtSGwCvXn4HsJcH7rrawGVpUxNckFj698&usqp=CAU', 'points': '150' },
-        { 'number': '8', 'Teamlogo': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgAQohBsdddPU6aJvkMmqVlSl5HMEs4wqpAQrtSGwCvXn4HsJcH7rrawGVpUxNckFj698&usqp=CAU', 'points': '100' },
-        { 'number': '9', 'Teamlogo': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgAQohBsdddPU6aJvkMmqVlSl5HMEs4wqpAQrtSGwCvXn4HsJcH7rrawGVpUxNckFj698&usqp=CAU', 'points': '100' },
-        { 'number': '10', 'Teamlogo': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgAQohBsdddPU6aJvkMmqVlSl5HMEs4wqpAQrtSGwCvXn4HsJcH7rrawGVpUxNckFj698&usqp=CAU', 'points': '100' },
-    ];
-
+    const [donateList, setDonateList] = useState([]);
     const [showAll, setShowAll] = useState(false);
+
+    useEffect(() => {
+        const fetchDonateList = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/rank/team/donation`);
+                setDonateList(response.data.teams);
+                console.log(response.data);
+            } catch (error) {
+                console.error('기부 목록 가져오기 실패', error);
+            }
+        };
+
+        fetchDonateList();
+    }, []);
 
     const handleToggleShow = () => {
         setShowAll(!showAll);
     };
 
-    const DonateFan = ({ number, Teamlogo, points }) => (
+    const DonateFan = ({ rank, logoUrl, point }) => (
         <CustomRow gap='30px'>
-            <CustomFont color='red' font='1.5rem' fontWeight='bold'>{number}</CustomFont>
-            <ItemImage src={Teamlogo} alt={number} />
-            <CustomFont color='black' font='1.3rem'>누적 기부 포인트: {points}</CustomFont>
+            <CustomFont color='red' font='1.5rem' fontWeight='bold'>{rank}</CustomFont>
+            <ItemImage src={logoUrl} alt={`Team ${rank}`} />
+            <CustomFont color='black' font='1.3rem'>누적 기부 포인트: {point}</CustomFont>
         </CustomRow>
     );
 
     return (
         <Container>
-
-                <CustomRow width='55%' alignItems='center' justifyContent='flex-start'>
-                    <CustomFont color='black' font='1.8rem' fontWeight='bold'>패럴림픽을 후원해요!</CustomFont>
-                </CustomRow>
-                <CustomRow width='55%' alignItems='center' justifyContent='space-between'>
-                    <CustomFont color='black' font='1.2rem'>가장 기부를 많이 한 야구 팬클럽은?</CustomFont>
-                    <CustomFont color='black' font='0.8rem'>30분 단위로 갱신됩니다. </CustomFont>
-
-                </CustomRow>
+            <CustomRow width='55%' alignItems='center' justifyContent='flex-start'>
+                <CustomFont color='black' font='1.8rem' fontWeight='bold'>패럴림픽을 후원해요!</CustomFont>
+            </CustomRow>
+            <CustomRow width='55%' alignItems='center' justifyContent='space-between'>
+                <CustomFont color='black' font='1.2rem'>가장 기부를 많이 한 야구 팬클럽은?</CustomFont>
+                <CustomFont color='black' font='0.8rem'>30분 단위로 갱신됩니다. </CustomFont>
+            </CustomRow>
 
             <DonateBox>
                 <CustomColumn>
-                    {DanateList.slice(0, showAll ? DanateList.length : 3).map((item, index) => (
+                    {donateList.slice(0, showAll ? donateList.length : 3).map((item, index) => (
                         <DonateFan
                             key={index}
-                            number={item.number}
-                            Teamlogo={item.Teamlogo}
-                            points={item.points}
+                            rank={item.rank}
+                            logoUrl={item.logoUrl}
+                            point={item.point}
                         />
                     ))}
                 </CustomColumn>

@@ -83,6 +83,7 @@ const App = () => {
                 });
                 const sortedFans = response.data.user.sort((a, b) => b.completeMission - a.completeMission);
                 setFans(sortedFans);
+                console.log(response.data);
             } catch (error) {
                 console.error('팬 정보 가져오기 실패', error);
             }
