@@ -161,45 +161,42 @@ export default function App() {
   });
   const [winningRate, setWinningRate] = useState('0%');
 
+  const fetchUserInfo = async () => {
+    const accessToken = localStorage.getItem('accessToken');
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/my`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+      setUserInfo(response.data);
+      console.log('유저 정보 가져오기 성공!');
+      console.log('Access Token:', accessToken);
+
+      // 유저 정보 가져온 후 승률 API 호출
+      axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/my/winningrate`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+        .then((response) => {
+          setWinningRate(response.data.winningRate);
+          console.log('승률 정보 가져오기 성공!');
+        })
+        .catch((error) => {
+          console.error('승률 정보 가져오기 실패', error);
+        });
+
+    } catch (error) {
+      console.error('유저 정보 가져오기 실패', error);
+      console.log('Access Token:', accessToken);
+    }
+  };
 
   // 유저 정보 요청 시작
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      const accessToken = localStorage.getItem('accessToken');
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/my`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        });
-        setUserInfo(response.data);
-        console.log('유저 정보 가져오기 성공!');
-        console.log('Access Token:', accessToken);
-
-        // 유저 정보 가져온 후 승률 API 호출
-        axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/my/winningrate`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        })
-          .then((response) => {
-            setWinningRate(response.data.winningRate);
-            console.log('승률 정보 가져오기 성공!');
-          })
-          .catch((error) => {
-            console.error('승률 정보 가져오기 실패', error);
-          });
-
-      } catch (error) {
-        console.error('유저 정보 가져오기 실패', error);
-        console.log('Access Token:', accessToken);
-      }
-    };
-
     fetchUserInfo();
   }, []);
-
-
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -221,38 +218,56 @@ export default function App() {
 
   const Donatedata = [
     {
+      'id': 1,
       'img': 'https://ae01.alicdn.com/kf/S139a8230386c4dc68e22ac256c42d6bbw/TPU.jpg',
       'text1': '마라톤 선수에게 물병 후원하기',
       'text2': '10 포인트'
     },
     {
+      'id': 2,
       'img': 'https://sitem.ssgcdn.com/38/19/62/item/1000524621938_i1_750.jpg',
       'text1': '수영 선수에게 팔꿈치 보호대 후원하기',
       'text2': '20 포인트'
     },
     {
+      'id': 3,
       'img': 'https://giftinfo.co.kr/shop/item_images/zoom1/298398.jpg',
       'text1': '높이뛰기 선수에게 쿨토시 후원하기',
       'text2': '5 포인트'
     },
     {
+      'id': 4,
       'img': 'https://image.auction.co.kr/itemimage/3f/83/0a/3f830a5b01.jpg',
       'text1': '멀리뛰기 선수에게 운동화 후원하기',
       'text2': '35 포인트'
     },
   ];
 
-  const DonationItem = ({ img, text1, text2 }) => (
-    <ItemContainer>
+  const DonationItem = ({ id, img, text1, text2, onDonate }) => (
+    <ItemContainer onClick={() => onDonate(id)}>
       <ItemImage src={img} alt={text1} />
       <ItemText>{text1}</ItemText>
       <ItemPoints>{text2}</ItemPoints>
     </ItemContainer>
   );
 
-  const handleDonatePoint = async () => {
-    //TODO: 기부 포인트 차감 API 연동
-  }
+  const handleDonatePoint = async (donationId) => {
+    if (window.confirm('구매하시겠습니까?')) {
+      const accessToken = localStorage.getItem('accessToken');
+      try {
+        donationId = 1; // 임시 처리
+        const response = await axios.patch(`${import.meta.env.VITE_REACT_APP_SERVER}/my/donation/${donationId}`, {}, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        });
+        console.log('기부 성공', response.data);
+        fetchUserInfo(); // 기부 후 유저 정보 업데이트
+      } catch (error) {
+        console.error('기부 실패', error);
+      }
+    }
+  };
 
   return (
     <ContainerCenter width='100%' alignItems='center'>
@@ -317,13 +332,14 @@ export default function App() {
               </CustomFont>
 
               <CustomRow>
-                {Donatedata.map((item, index) => (
+                {Donatedata.map((item) => (
                   <DonationItem
-                    key={index}
+                    key={item.id}
+                    id={item.id}
                     img={item.img}
                     text1={item.text1}
                     text2={item.text2}
-                    onClick={handleDonatePoint}
+                    onDonate={handleDonatePoint}
                   />
                 ))}
               </CustomRow>
