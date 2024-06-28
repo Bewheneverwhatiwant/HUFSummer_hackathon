@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import CustomRow from '../../../Components/Container/CustomRow';
 
 const Container = styled.div`
@@ -68,10 +69,9 @@ const ClubNumber = styled.div`
   color: red;
 `;
 
-const ClubImage = styled.div`
+const ClubImage = styled.img`
   width: 50px;
   height: 50px;
-  background-color: #ccc;
   border-radius: 50%;
   margin-bottom: 10px;
 `;
@@ -82,26 +82,40 @@ const ClubText = styled.p`
 `;
 
 const App = () => {
-    const clubs = [
-        { id: 1, missions: 'nn', todayVotes: 'nn', totalVotes: 'nn' },
-        { id: 2, missions: 'nn', todayVotes: 'nn', totalVotes: 'nn' },
-        { id: 3, missions: 'nn', todayVotes: 'nn', totalVotes: 'nn' },
-    ];
+    const [clubs, setClubs] = useState([]);
+
+    useEffect(() => {
+        const fetchClubs = async () => {
+            try {
+                const today = new Date().toISOString().split('T')[0]; // 오늘 날짜를 'YYYY-MM-DD' 형식으로 얻기
+                const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/rank/team/mission`, {
+                    params: { date: today },
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                    }
+                });
+                const sortedClubs = response.data.teams.sort((a, b) => b.completeMission - a.completeMission);
+                setClubs(sortedClubs);
+            } catch (error) {
+                console.error('클럽 정보 가져오기 실패', error);
+            }
+        };
+
+        fetchClubs();
+    }, []);
 
     return (
         <Container>
             <Title>오늘, 가장 선행한 야구 팬클럽은?</Title>
             <Subtitle>30분 단위로 갱신됩니다.</Subtitle>
             <ClubContainer>
-                {clubs.map((club) => (
-                    <ClubRow key={club.id}>
-                        <ClubNumber>{club.id}</ClubNumber>
-
-                        <ClubImage />
-                        <ClubText>미션 달성 {club.missions}번</ClubText>
-
-                        <ClubText>오늘 투표 {club.todayVotes}번</ClubText>
-                        <ClubText>누적 투표 {club.totalVotes}명</ClubText>
+                {clubs.map((club, index) => (
+                    <ClubRow key={index}>
+                        <ClubNumber>{club.rank}</ClubNumber>
+                        <ClubImage src={club.logoUrl} alt={`club-${club.rank}-logo`} />
+                        <ClubText>미션 달성 {club.completeMission}번</ClubText>
+                        <ClubText>오늘 투표 {club.todayVote}번</ClubText>
+                        <ClubText>누적 투표 {club.totalVote}명</ClubText>
                     </ClubRow>
                 ))}
             </ClubContainer>
