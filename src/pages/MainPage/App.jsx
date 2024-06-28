@@ -51,8 +51,8 @@ export default function App() {
         <MissionDiv />
         <NowContest />
         <CustomRow width='70%' alignItems='flex-start' justifyContent='center'>
-          <MostKindClub />
           <MostKindFan />
+          <MostKindClub />
         </CustomRow>
         <DonateParl />
         <DonateThings />

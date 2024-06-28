@@ -40,6 +40,7 @@ const ClubContainer = styled.div`
   border-radius: 10px;
   text-align: center;
   border: 1px solid #ccc;
+  margin-bottom: 10px;
 `;
 
 const ClubRow = styled.div`
@@ -90,10 +91,7 @@ const App = () => {
     return (
         <Container>
             <Title>오늘, 가장 선행~ 야구 팬클럽은?</Title>
-            <CustomRow>
-                <Subtitle>30분 단위로 갱신됩니다.</Subtitle>
-                <AllButton>모두보기</AllButton>
-            </CustomRow>
+            <Subtitle>30분 단위로 갱신됩니다.</Subtitle>
             <ClubContainer>
                 {clubs.map((club) => (
                     <ClubRow key={club.id}>
@@ -107,6 +105,9 @@ const App = () => {
                     </ClubRow>
                 ))}
             </ClubContainer>
+            <CustomRow width='80%' alignItems='center' justifyContent='flex-end'>
+                <AllButton>모두보기</AllButton>
+            </CustomRow>
         </Container>
     );
 };
