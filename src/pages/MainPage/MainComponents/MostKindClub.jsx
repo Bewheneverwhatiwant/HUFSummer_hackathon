@@ -96,10 +96,10 @@ const App = () => {
                 {clubs.map((club) => (
                     <ClubRow key={club.id}>
                         <ClubNumber>{club.id}</ClubNumber>
-                        <ClubColumn>
-                            <ClubImage />
-                            <ClubText>미션 달성 {club.missions}번</ClubText>
-                        </ClubColumn>
+
+                        <ClubImage />
+                        <ClubText>미션 달성 {club.missions}번</ClubText>
+
                         <ClubText>오늘 투표 {club.todayVotes}번</ClubText>
                         <ClubText>누적 투표 {club.totalVotes}명</ClubText>
                     </ClubRow>

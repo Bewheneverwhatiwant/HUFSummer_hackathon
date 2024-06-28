@@ -87,12 +87,17 @@ const LoginPanel = ({ switchToSignup, onClose }) => {
           'Content-Type': 'application/json',
         },
       });
+
       console.log('로그인 성공', response.data);
-      const { nickname, email } = response.data;
-      // 여기서 반환되는 nickname과 email을 AuthContext에 담도록 수정하기 (백엔드에게 반환값 수정 의뢰)!!
-      console.log(nickname);
-      console.log(email);
-      login(nickname, email); // 로그인 성공 시 nickname과 email이 담겨지는 부분
+      const { memberId, accessToken, refreshToken } = response.data;
+
+      // 토큰을 localStorage에 저장
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+
+      // AuthContext 파일에 토큰과 정보 보관 !!
+      login(memberId, accessToken, refreshToken);
+
       alert('로그인되었습니다!');
       onClose();
     } catch (error) {

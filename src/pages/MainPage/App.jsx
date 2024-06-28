@@ -50,7 +50,7 @@ export default function App() {
       <PageContainer>
         <MissionDiv />
         <NowContest />
-        <CustomRow width='70%' alignItems='flex-start' justifyContent='center'>
+        <CustomRow width='70%' alignItems='flex-start' justifyContent='center' gap='5px'>
           <MostKindFan />
           <MostKindClub />
         </CustomRow>

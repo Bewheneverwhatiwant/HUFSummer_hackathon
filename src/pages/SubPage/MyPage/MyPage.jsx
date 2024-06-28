@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useAuth } from '../../SubPage/AuthContext';
+import { useAuth } from '../AuthContext';
 import CustomRow from '../../../Components/Container/CustomRow';
 import CustomFont from '../../../Components/Container/CustomFont';
 import CustomColumn from '../../../Components/Container/CustomColumn';
@@ -67,7 +67,6 @@ justify-content: center;
 align-items: center;
 padding: 15px;
 border-radius: 5px;
-
 `;
 
 const ListContainer = styled.div`
@@ -141,7 +140,6 @@ const DropdownItem = styled.a`
 
 const items = ["KT", "기아", "롯데", "LG", "NC", "SK", "삼성", "한화", "두산", "키움"];
 
-
 export default function App() {
   const { auth } = useAuth();
   const [profileImage, setProfileImage] = useState(null);
@@ -150,6 +148,32 @@ export default function App() {
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedItem, setSelectedItem] = useState("Select Team");
+
+  const [userInfo, setUserInfo] = useState({
+    nickname: '',
+    email: '',
+    point: 0
+  });
+
+
+  // 유저 정보 요청 시작
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/my`, {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`
+          }
+        });
+        setUserInfo(response.data);
+        console.log('유저 정보 가져오기 성공!');
+      } catch (error) {
+        console.error('유저 정보 가져오기 실패', error);
+      }
+    };
+
+    fetchUserInfo();
+  }, [auth.accessToken]);
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -215,7 +239,7 @@ export default function App() {
       'text2': '35 포인트'
     },
   ];
-  
+
   const DonationItem = ({ img, text1, text2 }) => (
     <ItemContainer>
       <ItemImage src={img} alt={text1} />
@@ -224,33 +248,30 @@ export default function App() {
     </ItemContainer>
   );
 
-  const handleDonatePoint = async() => {
+  const handleDonatePoint = async () => {
     //TODO: 기부 포인트 차감 API 연동
   }
-  //KT 기아 롯데 LG NC SK 삼성 한화 두산 키움
-  
+
   return (
     <ContainerCenter width='100%' alignItems='center'>
       <PageContainer>
-
-          {auth.isLoggedIn && (
-            <CustomColumn  gap='80px'>              
-
-              <CustomColumn>  
+        {auth.isLoggedIn && (
+          <CustomColumn gap='80px'>
+            <CustomColumn>
               <CustomFont color='black' font='2rem' fontWeight='bold' alignItems='left'>내 정보</CustomFont>
-              <CustomRow  justifyContent='center'>
+              <CustomRow justifyContent='center'>
                 <CustomRow gap='50px'>
-                  <CustomColumn alignItems = 'center' gap='10px'> 
+                  <CustomColumn alignItems='center' gap='10px'>
                     <ProfileImage src={preview} alt="Profile Preview" />
                     <DropdownContainer>
-                    <DropdownButton onClick={toggleDropdown}>
-                      {selectedItem}
-                    </DropdownButton>
+                      <DropdownButton onClick={toggleDropdown}>
+                        {selectedItem}
+                      </DropdownButton>
                       <DropdownContent show={showDropdown}>
                         {items.map((item, index) => (
-                          <DropdownItem 
-                            key={index} 
-                            href="#" 
+                          <DropdownItem
+                            key={index}
+                            href="#"
                             onClick={() => handleItemClick(item)}
                           >
                             {item}
@@ -259,15 +280,14 @@ export default function App() {
                       </DropdownContent>
                     </DropdownContainer>
                   </CustomColumn>
-
-                  <CustomColumn >
-                    <CustomFont color='black' font='1rem' fontWeight='bold'>닉네임: {auth.nickname}</CustomFont>
-                    <CustomFont color='black' font='1rem' fontWeight='bold'>이메일: {auth.email}</CustomFont>
+                  <CustomColumn>
+                    <CustomFont color='black' font='1rem' fontWeight='bold'>닉네임: {userInfo.nickname}</CustomFont>
+                    <CustomFont color='black' font='1rem' fontWeight='bold'>이메일: {userInfo.email}</CustomFont>
                     <CustomColumn gap='10px'>
                       <PointBox>
                         <CustomColumn gap='10px' alignItems='center'>
                           <CustomFont color='white' font='1.2rem'>나의 누적 포인트</CustomFont>
-                          <CustomFont color='white' font='1.5rem' fontWeight='bold'>300점</CustomFont>
+                          <CustomFont color='white' font='1.5rem' fontWeight='bold'>{userInfo.point}점</CustomFont>
                         </CustomColumn>
                       </PointBox>
                       <CustomFont color='black' font='0.8rem'>* 누적 포인트는 한 달 단위로 초기화됩니다. </CustomFont>
@@ -275,43 +295,40 @@ export default function App() {
                   </CustomColumn>
                 </CustomRow>
               </CustomRow>
-              </CustomColumn>
-              <CustomColumn> 
+            </CustomColumn>
+            <CustomColumn>
               <CustomRow gap='100px'>
                 <CustomFont color='black' font='2rem' fontWeight='bold'>나의 승패 예측은?</CustomFont>
                 <CustomFont color='black' font='2rem' fontWeight='bold'>65%</CustomFont>
               </CustomRow>
-              </CustomColumn>
-
-
-        <CustomColumn gap='10px'>
-          <CustomFont color='black' font='2rem' fontWeight='bold'>
-            포인트 기부하기
-          </CustomFont>
-          <CustomFont color='black' font='1rem' fontWeight='bold'>
-            내가 응원하는 팀의 이름으로 패럴림픽을 응원해요.    
-          </CustomFont>
-          <CustomFont color='black' font='1rem' fontWeight='bold'>
-            포인트는 현금으로 투명하게 전달됩니다. 
-          </CustomFont>
-
-          <CustomRow>
-              {Donatedata.map((item, index) => (
-                <DonationItem 
-                  key={index} 
-                  img={item.img} 
-                  text1={item.text1} 
-                  text2={item.text2} onClick={handleDonatePoint}
-                />
-              ))}
-          </CustomRow>
-        </CustomColumn>
             </CustomColumn>
-          )}
 
+            <CustomColumn gap='10px'>
+              <CustomFont color='black' font='2rem' fontWeight='bold'>
+                포인트 기부하기
+              </CustomFont>
+              <CustomFont color='black' font='1rem' fontWeight='bold'>
+                내가 응원하는 팀의 이름으로 패럴림픽을 응원해요.
+              </CustomFont>
+              <CustomFont color='black' font='1rem' fontWeight='bold'>
+                포인트는 현금으로 투명하게 전달됩니다.
+              </CustomFont>
+
+              <CustomRow>
+                {Donatedata.map((item, index) => (
+                  <DonationItem
+                    key={index}
+                    img={item.img}
+                    text1={item.text1}
+                    text2={item.text2}
+                    onClick={handleDonatePoint}
+                  />
+                ))}
+              </CustomRow>
+            </CustomColumn>
+          </CustomColumn>
+        )}
       </PageContainer>
     </ContainerCenter>
   );
 }
-
-
