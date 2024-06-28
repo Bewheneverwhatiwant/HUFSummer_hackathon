@@ -13,26 +13,29 @@ const Container = styled.div`
 `;
 
 const ItemImage = styled.img`
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 100px;
 `;
 
 const ToggleButton = styled.button`
     padding: 10px 20px;
     font-size: 1rem;
-    background-color: #007BFF;
+    background-color: #54B3FF;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
     margin: 10px 0;
+    font-weight: bold;
 `;
 
 const DonateBox = styled.div`
     width: 55%;
-    background-color: #EFEFEF;
-    padding: 30px;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 50px;
     
 
 `;
@@ -58,25 +61,25 @@ export default function DonateParl() {
     };
 
     const DonateFan = ({ number, Teamlogo, points }) => (
-        <CustomRow>
-            <CustomFont color='red' font='1.5rem'>{number}</CustomFont>
+        <CustomRow gap='30px'>
+            <CustomFont color='red' font='1.5rem' fontWeight='bold'>{number}</CustomFont>
             <ItemImage src={Teamlogo} alt={number} />
-            <CustomFont color='black' font='1.5rem'>누적 기부 포인트: {points}</CustomFont>
+            <CustomFont color='black' font='1.3rem'>누적 기부 포인트: {points}</CustomFont>
         </CustomRow>
     );
 
     return (
         <Container>
-            <CustomRow width='55%' alignItems='center' justifyContent='flex-start'>
-                <CustomFont color='black' font='1.8rem' fontWeight='bold'>패럴림픽을 후원해요!</CustomFont>
-            </CustomRow>
-            <CustomRow width='55%' alignItems='center' justifyContent='flex-start'>
-                <CustomFont color='black' font='1.2rem'>가장 기부를 많이 한 야구 팬클럽은?</CustomFont>
-            </CustomRow>
 
-            <CustomRow width='55%' alignItems='center' justifyContent='flex-start'>
-                <CustomFont color='black' font='0.8rem'>30분 단위로 갱신됩니다. </CustomFont>
-            </CustomRow>
+                <CustomRow width='55%' alignItems='center' justifyContent='flex-start'>
+                    <CustomFont color='black' font='1.8rem' fontWeight='bold'>패럴림픽을 후원해요!</CustomFont>
+                </CustomRow>
+                <CustomRow width='55%' alignItems='center' justifyContent='space-between'>
+                    <CustomFont color='black' font='1.2rem'>가장 기부를 많이 한 야구 팬클럽은?</CustomFont>
+                    <CustomFont color='black' font='0.8rem'>30분 단위로 갱신됩니다. </CustomFont>
+
+                </CustomRow>
+
             <DonateBox>
                 <CustomColumn>
                     {DanateList.slice(0, showAll ? DanateList.length : 3).map((item, index) => (
