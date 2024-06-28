@@ -73,7 +73,7 @@ const App = () => {
           },
         });
         if (response.status === 200) {
-          setMission(response.data);
+          setMission(response.data.content);
         }
       } catch (error) {
         if (error.response && error.response.status === 400) {
@@ -105,17 +105,18 @@ const App = () => {
       {auth.isLoggedIn ? (
         <MissionContainer onClick={camera}>
           <CustomFont color='black' fontWeight='bold' font='2rem'>오늘의 미션</CustomFont>
-          <CustomFont color='black' font='1.5rem'>{mission}[</CustomFont>
+          <CustomFont color='black' font='1.5rem'>{mission}</CustomFont>
           <IconImage src='icon_click.png' />
         </MissionContainer>
       ) : (
 
         <MissionContainer>
-        <CustomFont color='black' fontWeight='bold' font='2rem'>오늘의 미션</CustomFont>
-        <CustomFont color='black' font='1.5rem'>          미션 수행을 위해 로그인을 해주세요.
-        </CustomFont>
-        <IconImage src='icon_click.png' />
-      </MissionContainer>
+          <CustomFont color='black' fontWeight='bold' font='2rem'>오늘의 미션</CustomFont>
+            <CustomFont color='black' font='1.5rem'>          
+              미션 수행을 위해 로그인을 해주세요.
+            </CustomFont>
+          <IconImage src='icon_click.png' />
+        </MissionContainer>
       )}
     </Container>
   );
