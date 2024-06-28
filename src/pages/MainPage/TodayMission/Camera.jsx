@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import Webcam from 'react-webcam';
+import SuccessModal from './SuccessModal';
+import FailModal from './FailModal';
 
 const ContainerCenter = styled.div`
   display: flex;
@@ -61,21 +63,37 @@ const ActionButton = styled.button`
   cursor: pointer;
 `;
 
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const CustomModal = styled.div`
+width: 50%;
+height: 40vh;
+display: flex;
+alignItems: center;
+justify-content: center;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 20px;
   background-color: white;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 `;
 
 const App = () => {
     const webcamRef = useRef(null);
     const [capturedImage, setCapturedImage] = useState(null);
-    const [isUploading, setIsUploading] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false); // 이미지 업로드 성공 시 Modal
+    const [isFail, setIsFail] = useState(false); // 이미지 업로드 실패 시 Modal
 
     const captureImage = () => {
         const imageSrc = webcamRef.current.getScreenshot();
@@ -86,13 +104,17 @@ const App = () => {
         setCapturedImage(null);
     };
 
+    // 이미지 업로드 함수!
+    // 이미지 업로드 성공 시 SuccessModal이 true, 이미지 업로드 실패 시 FailModal이 true가 되도록!
+    // gpt api 연동 후 처리하기
     const uploadImage = () => {
-        setIsUploading(true);
-        // 여기에서 업로드 로직을 구현합니다. 예를 들어, 업로드를 시뮬레이션하기 위해 setTimeout을 사용할 수 있습니다.
-        setTimeout(() => {
-            setIsUploading(false);
-            alert('이미지가 업로드되었습니다.');
-        }, 2000);
+        setIsSuccess(true);
+    };
+
+
+    // 이미지 업로드 성공 시 Modal 닫기
+    const handleClose = () => {
+        setIsSuccess(false);
     };
 
     return (
@@ -118,10 +140,11 @@ const App = () => {
                         </ButtonContainer>
                     </CapturedImageContainer>
                 )}
-                {isUploading && (
-                    <CustomModal>
-                        이미지 업로드 중...
-                    </CustomModal>
+                {isSuccess && (
+                    <SuccessModal onClose={handleClose} />
+                )}
+                {isFail && (
+                    <FailModal />
                 )}
             </PageContainer>
         </ContainerCenter>
