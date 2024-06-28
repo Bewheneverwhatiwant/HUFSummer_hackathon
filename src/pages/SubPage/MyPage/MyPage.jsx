@@ -58,11 +58,107 @@ width: 30%;
 background-color: #6F6F6F;
 `;
 
+const PointBox = styled.div`
+height: 30px
+width: 50px;
+background-color: #54B3FF;
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 15px;
+border-radius: 5px;
+
+`;
+
+const ListContainer = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+`;
+
+const ItemContainer = styled.div`
+border: 1px solid #ddd;
+border-radius: 8px;
+padding: 16px;
+margin: 10px;
+max-width: 150px;
+text-align: center;
+cursor: pointer;
+`;
+
+const ItemImage = styled.img`
+width: 120px;
+height: 120px;
+border-radius: 8px;
+`;
+
+const ItemText = styled.h3`
+font-size: 15px;
+margin: 12px 0 8px;
+`;
+
+const ItemPoints = styled.p`
+font-size: 16px;
+color: #555;
+`;
+const DropdownContainer = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+const DropdownButton = styled.button`
+  background-color: #FFFFFF;
+  color: black;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 50px;
+  border: 2px solid #54B3FF;
+  width: 80px;
+`;
+
+const DropdownContent = styled.div`
+  display: ${props => (props.show ? 'block' : 'none')};
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 4px;
+`;
+
+const DropdownItem = styled.a`
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+
+  &:hover {
+    background-color: #f1f1f1;
+  }
+`;
+
+const items = ["KT", "기아", "롯데", "LG", "NC", "SK", "삼성", "한화", "두산", "키움"];
+
+
 export default function App() {
   const { auth } = useAuth();
   const [profileImage, setProfileImage] = useState(null);
   const [preview, setPreview] = useState('icon_normalProfile.png'); // 기본 이미지
   const [isButtonVisible, setIsButtonVisible] = useState(false);
+
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedItem, setSelectedItem] = useState("Select Team");
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
+  const handleItemClick = (item) => {
+    setSelectedItem(item);
+    setShowDropdown(false);
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -97,25 +193,125 @@ export default function App() {
     }
   };
 
+  const Donatedata = [
+    {
+      'img': 'https://ae01.alicdn.com/kf/S139a8230386c4dc68e22ac256c42d6bbw/TPU.jpg',
+      'text1': '마라톤 선수에게 물병 후원하기',
+      'text2': '10 포인트'
+    },
+    {
+      'img': 'https://sitem.ssgcdn.com/38/19/62/item/1000524621938_i1_750.jpg',
+      'text1': '수영 선수에게 팔꿈치 보호대 후원하기',
+      'text2': '20 포인트'
+    },
+    {
+      'img': 'https://giftinfo.co.kr/shop/item_images/zoom1/298398.jpg',
+      'text1': '높이뛰기 선수에게 쿨토시 후원하기',
+      'text2': '5 포인트'
+    },
+    {
+      'img': 'https://image.auction.co.kr/itemimage/3f/83/0a/3f830a5b01.jpg',
+      'text1': '멀리뛰기 선수에게 운동화 후원하기',
+      'text2': '35 포인트'
+    },
+  ];
+  
+  const DonationItem = ({ img, text1, text2 }) => (
+    <ItemContainer>
+      <ItemImage src={img} alt={text1} />
+      <ItemText>{text1}</ItemText>
+      <ItemPoints>{text2}</ItemPoints>
+    </ItemContainer>
+  );
+
+  const handleDonatePoint = async() => {
+    //TODO: 기부 포인트 차감 API 연동
+  }
+  //KT 기아 롯데 LG NC SK 삼성 한화 두산 키움
+  
   return (
-    <ContainerCenter>
+    <ContainerCenter width='100%' alignItems='center'>
       <PageContainer>
-        <CustomRow width='100%' alignItems='center' justifyContent='center'>
-          <CustomColumn>
-            <ProfileImage src={preview} alt="Profile Preview" />
-            <FileInput type="file" accept="image/*" onChange={handleImageChange} />
-            {isButtonVisible && <Button onClick={handleButtonClick}>프로필 변경</Button>}
-          </CustomColumn>
+
           {auth.isLoggedIn && (
-            <CustomColumn>
-              <CustomFont color='black' font='1rem' fontWeight='bold'>닉네임: {auth.nickname}</CustomFont>
-              <CustomFont color='black' font='1rem' fontWeight='bold'>이메일: {auth.email}</CustomFont>
+            <CustomColumn  gap='80px'>              
+
+              <CustomColumn>  
+              <CustomFont color='black' font='2rem' fontWeight='bold' alignItems='left'>내 정보</CustomFont>
+              <CustomRow  justifyContent='center'>
+                <CustomRow gap='50px'>
+                  <CustomColumn alignItems = 'center' gap='10px'> 
+                    <ProfileImage src={preview} alt="Profile Preview" />
+                    <DropdownContainer>
+                    <DropdownButton onClick={toggleDropdown}>
+                      {selectedItem}
+                    </DropdownButton>
+                      <DropdownContent show={showDropdown}>
+                        {items.map((item, index) => (
+                          <DropdownItem 
+                            key={index} 
+                            href="#" 
+                            onClick={() => handleItemClick(item)}
+                          >
+                            {item}
+                          </DropdownItem>
+                        ))}
+                      </DropdownContent>
+                    </DropdownContainer>
+                  </CustomColumn>
+
+                  <CustomColumn >
+                    <CustomFont color='black' font='1rem' fontWeight='bold'>닉네임: {auth.nickname}</CustomFont>
+                    <CustomFont color='black' font='1rem' fontWeight='bold'>이메일: {auth.email}</CustomFont>
+                    <CustomColumn gap='10px'>
+                      <PointBox>
+                        <CustomColumn gap='10px' alignItems='center'>
+                          <CustomFont color='white' font='1.2rem'>나의 누적 포인트</CustomFont>
+                          <CustomFont color='white' font='1.5rem' fontWeight='bold'>300점</CustomFont>
+                        </CustomColumn>
+                      </PointBox>
+                      <CustomFont color='black' font='0.8rem'>* 누적 포인트는 한 달 단위로 초기화됩니다. </CustomFont>
+                    </CustomColumn>
+                  </CustomColumn>
+                </CustomRow>
+              </CustomRow>
+              </CustomColumn>
+              <CustomColumn> 
+              <CustomRow gap='100px'>
+                <CustomFont color='black' font='2rem' fontWeight='bold'>나의 승패 예측은?</CustomFont>
+                <CustomFont color='black' font='2rem' fontWeight='bold'>65%</CustomFont>
+              </CustomRow>
+              </CustomColumn>
+
+
+        <CustomColumn gap='10px'>
+          <CustomFont color='black' font='2rem' fontWeight='bold'>
+            포인트 기부하기
+          </CustomFont>
+          <CustomFont color='black' font='1rem' fontWeight='bold'>
+            내가 응원하는 팀의 이름으로 패럴림픽을 응원해요.    
+          </CustomFont>
+          <CustomFont color='black' font='1rem' fontWeight='bold'>
+            포인트는 현금으로 투명하게 전달됩니다. 
+          </CustomFont>
+
+          <CustomRow>
+              {Donatedata.map((item, index) => (
+                <DonationItem 
+                  key={index} 
+                  img={item.img} 
+                  text1={item.text1} 
+                  text2={item.text2} onClick={handleDonatePoint}
+                />
+              ))}
+          </CustomRow>
+        </CustomColumn>
             </CustomColumn>
           )}
-        </CustomRow>
-        <Line />
-        <MyTab />
+
       </PageContainer>
     </ContainerCenter>
   );
 }
+
+
