@@ -1,14 +1,14 @@
 import { useState } from 'react'
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import NowContest from '../MainPage/MainComponents/NowContest';
 import MissionDiv from '../MainPage/TodayMission/MissionDiv';
 import MostKindClub from '../MainPage/MainComponents/MostKindClub';
 import MostKindFan from '../MainPage/MainComponents/MostKindFan';
 import CustomRow from '../../Components/Container/CustomRow';
+import DonateParl from '../MainPage/MainComponents/DonateParl';
+import DonateThings from '../MainPage/MainComponents/DonateThings';
 
-import DonateParl from '../MainPage/MainComponents/DonateParl'
-import DonateThings from '../MainPage/MainComponents/DonateThings'
 // 메인페이지
 
 const ContainerCenter = styled.div`
@@ -34,10 +34,33 @@ const PageContainer = styled(ContainerCenter)`
   background-size: 100% 100%;
 `;
 
-// Camera와 NowContest에서 버튼 클릭 시 로그인 검사 후 로그인하라고 안내하는 기능 추가하기 !!
+const TopImgContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 600px;
+`;
+
+const TopImg = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('TopImg.png');
+  background-size: 100% 100%;
+  z-index: 1;
+`;
+
+const MissionDivContainer = styled.div`
+width: 100%;
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+`;
 
 export default function App() {
-
   const navigate = useNavigate();
 
   const camera = () => {
@@ -45,10 +68,14 @@ export default function App() {
   };
 
   return (
-
     <ContainerCenter>
       <PageContainer>
-        <MissionDiv />
+        <TopImgContainer>
+          <TopImg />
+          <MissionDivContainer>
+            <MissionDiv />
+          </MissionDivContainer>
+        </TopImgContainer>
         <NowContest />
         <CustomRow width='70%' alignItems='flex-start' justifyContent='center' gap='5px'>
           <MostKindFan />
@@ -56,7 +83,6 @@ export default function App() {
         </CustomRow>
         <DonateParl />
         <DonateThings />
-
       </PageContainer>
     </ContainerCenter>
   )
