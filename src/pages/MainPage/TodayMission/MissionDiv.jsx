@@ -98,7 +98,7 @@ const App = () => {
 
     return (
         <Container>
-            <Title>원하는 구단에 투표하세요!</Title>
+            <Title>응원하는 구단에 투표하세요!</Title>
             <Description>
                 오늘의 미션을 수행하면 포인트를 받을 수 있습니다.<br />
                 포인트로 응원하는 구단에 투표하고 기부해보세요. <br />
