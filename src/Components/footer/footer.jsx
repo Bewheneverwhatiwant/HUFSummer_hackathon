@@ -38,7 +38,11 @@ export default function Footer() {
 
     const withdraw = async () => {
         try {
-            const response = await axios.delete(`${import.meta.env.VITE_REACT_APP_SERVER}/auth/termination`);
+            const response = await axios.delete(`${import.meta.env.VITE_REACT_APP_SERVER}/auth/termination`, {
+                headers: {
+                    Authorization: `Bearer ${auth.accessToken}`
+                }
+            });
             if (response.status === 200) {
                 alert('회원 탈퇴가 완료되었습니다.');
                 logout();

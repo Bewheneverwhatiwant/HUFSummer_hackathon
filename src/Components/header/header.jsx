@@ -8,6 +8,7 @@ import CustomFont from '../Container/CustomFont';
 import CustomColumn from '../Container/CustomColumn';
 import CustomModal from '../Container/CustomModal';
 import LoginModal from './LoginModal';
+import axios from 'axios';
 
 const HeaderContainer = styled.header`
   position: fixed;
@@ -52,6 +53,27 @@ const LogoButton = styled.button`
 export default function Header() {
     const navigate = useNavigate();
     const { auth, logout } = useAuth(); // useAuth 훅 사용
+    const [nickname, setNickname] = useState('');
+
+    useEffect(() => {
+        if (auth.isLoggedIn) {
+            const fetchUserInfo = async () => {
+                try {
+                    const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/my`, {
+                        headers: {
+                            Authorization: `Bearer ${auth.accessToken}`
+                        }
+                    });
+                    setNickname(response.data.nickname);
+                    console.log('유저 정보 가져오기 성공!');
+                } catch (error) {
+                    console.error('유저 정보 가져오기 실패', error);
+                }
+            };
+
+            fetchUserInfo();
+        }
+    }, [auth.isLoggedIn, auth.accessToken]);
 
     const mypage = () => {
         navigate('/mypage');
@@ -94,7 +116,7 @@ export default function Header() {
                         ) : (
                             <>
                                 <CustomFont color='black' fontSize='1rem' margin='0 10px' fontWeight='bold'>
-                                    {auth.nickname}
+                                    {nickname}
                                 </CustomFont>
                                 <HeaderButton onClick={mypage}>
                                     MY
