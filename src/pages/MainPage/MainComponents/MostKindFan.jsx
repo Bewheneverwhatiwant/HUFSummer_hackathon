@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const Container = styled.div`
   display: flex;
@@ -55,10 +56,9 @@ const ClubNumber = styled.div`
   color: red;
 `;
 
-const ClubImage = styled.div`
+const ClubImage = styled.img`
   width: 50px;
   height: 50px;
-  background-color: #ccc;
   border-radius: 50%;
   margin-bottom: 10px;
 `;
@@ -69,25 +69,39 @@ const ClubText = styled.p`
 `;
 
 const App = () => {
-    const fans = [
-        { id: 1, missions: 'nn', totalVotes: 'nn' },
-        { id: 2, missions: 'nn', totalVotes: 'nn' },
-        { id: 3, missions: 'nn', totalVotes: 'nn' },
-    ];
+    const [fans, setFans] = useState([]);
+
+    useEffect(() => {
+        const fetchFans = async () => {
+            try {
+                const today = new Date().toISOString().split('T')[0]; // 오늘 날짜를 'YYYY-MM-DD' 형식으로 얻기
+                const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/rank/fan/mission`, {
+                    params: { date: today },
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                    }
+                });
+                const sortedFans = response.data.user.sort((a, b) => b.completeMission - a.completeMission);
+                setFans(sortedFans);
+            } catch (error) {
+                console.error('팬 정보 가져오기 실패', error);
+            }
+        };
+
+        fetchFans();
+    }, []);
 
     return (
         <Container>
             <Title>가장 매너있는 야구 팬은?</Title>
             <Subtitle>30분 단위로 갱신됩니다.</Subtitle>
             <ClubContainer>
-                {fans.map((fan) => (
-                    <ClubRow key={fan.id}>
-                        <ClubNumber>{fan.id}</ClubNumber>
-
-                        <ClubImage />
-                        <ClubText>미션 달성 {fan.missions}번</ClubText>
-
-                        <ClubText>누적 투표 {fan.totalVotes}번</ClubText>
+                {fans.map((fan, index) => (
+                    <ClubRow key={index}>
+                        <ClubNumber>{fan.rank}</ClubNumber>
+                        <ClubImage src={fan.logoUrl} alt={`fan-${fan.rank}-logo`} />
+                        <ClubText>미션 달성 {fan.completeMission}번</ClubText>
+                        <ClubText>누적 투표 {fan.totalVote}번</ClubText>
                     </ClubRow>
                 ))}
             </ClubContainer>

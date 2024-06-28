@@ -186,6 +186,25 @@ const ParlDonateContainer = styled.div`
   z-index: 2;
 `;
 
+const moveBall_2 = keyframes`
+  0%, 100% {
+    left: 10px;
+  }
+  50% {
+    left: 30px;
+  }
+`;
+
+const BallIcon_2 = styled.img`
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 70px;
+  height: 70px;
+  z-index: 3;
+  animation: ${moveBall_2} 3s linear infinite;
+`;
+
 export default function App() {
   const navigate = useNavigate();
 
@@ -207,6 +226,7 @@ export default function App() {
 
         <GrassContainer>
           <GrassImg />
+          <BallIcon_2 src="icon_ball.png" style={{ bottom: '20px' }} />
           <CustomRowWithPosition width='70%' alignItems='flex-start' justifyContent='center' gap='5px'>
             <MostKindFan />
             <MostKindClub />
