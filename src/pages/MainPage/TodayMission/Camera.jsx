@@ -26,7 +26,7 @@ const PageContainer = styled(ContainerCenter)`
   gap: 2rem;
   position: relative;
   background-color: white;
-  background-image: url('MainImg_2.png');
+  background-image: url('cameraBack.png');
   background-size: 100% 100%;
 `;
 
