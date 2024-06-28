@@ -14,6 +14,7 @@ const ImageContainer = styled.div`
   transition: transform 0.5s ease-in-out;
   transform: translateX(${props => props.translate}px);
   width: 100%;
+  min-height: 350px;
 `;
 
 const ImageWrapper = styled.div`

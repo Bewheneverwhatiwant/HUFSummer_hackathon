@@ -2,6 +2,7 @@ import { useState } from 'react'
 import styled, { keyframes } from 'styled-components';
 import MainCarousel from './MainCarousel';
 import MainTab from './MainTab';
+import MainRow from './MainRow';
 
 // 메인페이지
 
@@ -21,7 +22,7 @@ const PageContainer = styled(ContainerCenter)`
   justify-content: flex-start;
   padding-top: 8vh;
   padding-bottom: 5vh;
-  gap: 20px;
+  gap: 7rem;
   position: relative;
   background-color: white;
   background-image: url('MainImg_2.png');
@@ -34,10 +35,9 @@ export default function App() {
 
     <ContainerCenter>
       <PageContainer>
-
-        HUFSummer
         <MainCarousel />
         <MainTab />
+        <MainRow />
       </PageContainer>
     </ContainerCenter>
   )
