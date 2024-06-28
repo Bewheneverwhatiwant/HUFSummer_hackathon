@@ -5,6 +5,7 @@ import { useAuth } from '../../SubPage/AuthContext';
 import CustomRow from '../../../Components/Container/CustomRow';
 import CustomFont from '../../../Components/Container/CustomFont';
 import CustomColumn from '../../../Components/Container/CustomColumn';
+import MyTab from './MyTab';
 
 const ContainerCenter = styled.div`
   display: flex;
@@ -22,7 +23,7 @@ const PageContainer = styled(ContainerCenter)`
   justify-content: flex-start;
   padding-top: 8vh;
   padding-bottom: 5vh;
-  gap: 20px;
+  gap: 2rem;
   position: relative;
   background-color: white;
   background-image: url('MainImg_2.png');
@@ -49,6 +50,12 @@ const Button = styled.button`
   border-radius: 4px;
   cursor: pointer;
   color: #FFFFFF;
+`;
+
+const Line = styled.div`
+height: 1px;
+width: 30%;
+background-color: #6F6F6F;
 `;
 
 export default function App() {
@@ -106,6 +113,8 @@ export default function App() {
             </CustomColumn>
           )}
         </CustomRow>
+        <Line />
+        <MyTab />
       </PageContainer>
     </ContainerCenter>
   );
