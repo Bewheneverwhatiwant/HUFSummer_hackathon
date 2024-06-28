@@ -161,6 +161,7 @@ export default function App() {
     email: '',
     point: 0
   });
+  const [winningRate, setWinningRate] = useState('0%');
 
 
   // 유저 정보 요청 시작
@@ -174,6 +175,21 @@ export default function App() {
         });
         setUserInfo(response.data);
         console.log('유저 정보 가져오기 성공!');
+
+        // 유저 정보 가져온 후 승률 API 호출
+        axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/my/winningrate`, {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`
+          }
+        })
+          .then((response) => {
+            setWinningRate(response.data.winningRate);
+            console.log('승률 정보 가져오기 성공!');
+          })
+          .catch((error) => {
+            console.error('승률 정보 가져오기 실패', error);
+          });
+
       } catch (error) {
         console.error('유저 정보 가져오기 실패', error);
       }
@@ -181,6 +197,7 @@ export default function App() {
 
     fetchUserInfo();
   }, [auth.accessToken]);
+
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -306,7 +323,7 @@ export default function App() {
             <CustomColumn>
               <CustomRow gap='100px'>
                 <CustomFont color='black' font='2rem' fontWeight='bold'>나의 승패 예측은?</CustomFont>
-                <CustomFont color='black' font='2rem' fontWeight='bold'>65%</CustomFont>
+                <CustomFont color='black' font='2rem' fontWeight='bold'>{winningRate}%</CustomFont>
               </CustomRow>
             </CustomColumn>
 
