@@ -6,6 +6,7 @@ import CustomRow from '../../../Components/Container/CustomRow';
 import CustomFont from '../../../Components/Container/CustomFont';
 import CustomColumn from '../../../Components/Container/CustomColumn';
 import MyTab from './MyTab';
+import StyledImg from '../../../Components/Container/StyledImg';
 
 const ContainerCenter = styled.div`
   display: flex;
@@ -297,7 +298,7 @@ export default function App() {
               <CustomRow justifyContent='center'>
                 <CustomRow gap='50px'>
                   <CustomColumn alignItems='center' gap='10px'>
-                    <ProfileImage src={preview} alt="Profile Preview" />
+                    <StyledImg src={'logo.png'} width='150px' height='150px' />
                     <DropdownContainer>
                       <DropdownButton onClick={toggleDropdown}>
                         {selectedItem}

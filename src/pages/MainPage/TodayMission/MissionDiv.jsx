@@ -4,6 +4,7 @@ import axios from 'axios';
 import CustomFont from '../../../Components/Container/CustomFont';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../SubPage/AuthContext';
+import CustomColumn from '../../../Components/Container/CustomColumn';
 
 const Container = styled.div`
   display: flex;
@@ -12,6 +13,7 @@ const Container = styled.div`
   width: 100%;
   padding: 20px;
   box-sizing: border-box;
+  gap: 20rem;
 `;
 
 const Title = styled.h1`
@@ -98,17 +100,20 @@ const App = () => {
 
     return (
         <Container>
-            <Title>원하는 구단에 투표하세요!</Title>
-            <Description>
-                오늘의 미션을 수행하면 포인트를 받을 수 있습니다.<br />
-                포인트로 투표를 하거나 미션을 변경할 수 있습니다.<br />
-                미션을 수행하는 만큼 환경 보호에 동참할 수 있습니다.
-            </Description>
-            <MissionContainer onClick={camera}>
-                <CustomFont color='black' fontWeight='bold' font='2rem'>오늘의 미션</CustomFont>
-                <CustomFont color='black' font='1.5rem'>{missionContent}</CustomFont>
-                <IconImage src='icon_click.png' />
-            </MissionContainer>
+            <Title>BATTLE FOR US</Title>
+            <CustomColumn width='100%' alignItems='center' justyfyContent='center'>
+                <Title>원하는 구단에 투표하세요!</Title>
+                <Description>
+                    오늘의 미션을 수행하면 포인트를 받을 수 있습니다.<br />
+                    포인트로 투표를 하거나 미션을 변경할 수 있습니다.<br />
+                    미션을 수행하는 만큼 환경 보호에 동참할 수 있습니다.
+                </Description>
+                <MissionContainer onClick={camera}>
+                    <CustomFont color='black' fontWeight='bold' font='2rem'>오늘의 미션</CustomFont>
+                    <CustomFont color='black' font='1.5rem'>{missionContent}</CustomFont>
+                    <IconImage src='icon_click.png' />
+                </MissionContainer>
+            </CustomColumn>
         </Container>
     );
 };

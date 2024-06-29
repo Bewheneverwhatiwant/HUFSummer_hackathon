@@ -37,7 +37,7 @@ const PageContainer = styled(ContainerCenter)`
 const TopImgContainer = styled.div`
   position: relative;
   width: 100%;
-  height: 600px;
+  height: 100vh;
 `;
 
 const TopImg = styled.div`
@@ -117,7 +117,7 @@ const CustomRowWithPosition = styled(CustomRow)`
 const MissionDivContainer = styled.div`
   width: 100%;
   position: absolute;
-  top: 55%;
+  top: 10%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;

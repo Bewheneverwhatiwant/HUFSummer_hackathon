@@ -105,9 +105,7 @@ export default function Header() {
             <CustomRow width='97%' justifyContent='center'>
                 <CustomRow width='100%' justifyContent='space-between'>
                     <LogoButton onClick={Back}>
-                        <CustomFont color='black'>
-                            로고
-                        </CustomFont>
+                        <StyledImg src={'logo.png'} width='80px' height='50px' />
                     </LogoButton>
                     <CustomRow>
                         {!auth.isLoggedIn ? (
