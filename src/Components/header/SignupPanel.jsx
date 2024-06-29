@@ -36,6 +36,49 @@ const Input = styled.input`
   border-radius: 4px;
 `;
 
+const DropdownContainer = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+const DropdownButton = styled.button`
+  background-color: #FFFFFF;
+  color: black;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 10px;  
+  cursor: pointer;
+  border: 1px solid #D9D9D9;
+`;
+
+const DropdownContent = styled.div`
+  display: ${props => (props.show ? 'block' : 'none')};
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 4px;
+`;
+
+const DropdownItem = styled.a`
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+
+  &:hover {
+    background-color: #f1f1f1;
+  }
+`;
+
+const items = [
+  { id: 1, team: 'KT' }, { id: 2, team: '기아' }, { id: 3, team: '롯데' },
+  { id: 4, team: 'LG' }, { id: 5, team: 'NC' }, { id: 6, team: 'SK' },
+  { id: 7, team: '삼성' }, { id: 8, team: '한화' }, { id: 9, team: '두산' },
+  { id: 10, team: '키움' }
+];
+
 export default function SignupPanel({ switchToLogin }) {
   const [userId, setUserId] = useState('');
   const [isIdChecked, setIsIdChecked] = useState(false); // 아이디 중복검사
@@ -44,7 +87,10 @@ export default function SignupPanel({ switchToLogin }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
-  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedItem, setSelectedItem] = useState("응원하는 구단을 선택해주세요.");
+  const [teamId, setTeamId] = useState(null); // 팀 아이디 저장
 
   const handlePasswordChange = (e) => {
     const value = e.target.value;
@@ -70,11 +116,8 @@ export default function SignupPanel({ switchToLogin }) {
     setProfileImage(e.target.files[0]);
   };
 
-  // 프로필 이미지는 필수가 아니도록 수정함 !! 
-  const isFormValid = userId && isIdChecked && isEmailChecked && password && confirmPassword && !passwordError && name;
+  const isFormValid = userId && isIdChecked && isEmailChecked && password && confirmPassword && !passwordError && email && teamId !== null;
 
-
-  //아이디 중복 체크 시작
   const handleIdCheck = async () => {
     if (!userId) {
       alert('아이디를 입력하세요.');
@@ -100,24 +143,20 @@ export default function SignupPanel({ switchToLogin }) {
       }
     }
   };
-  //아이디 중복 체크 끝
 
-
-  //이메일 중복 체크 시작
   const handleEmailCheck = async () => {
-    if (!name) {
+    if (!email) {
       alert('이메일을 입력하세요.');
       return;
     }
     try {
       const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/auth/check-email`, {
-        params: { email: name }
+        params: { email: email }
       });
       if (response.status === 200) {
         setIsEmailChecked(true);
         alert('사용 가능한 이메일입니다.');
-        console.log(name);
-
+        console.log(email);
       }
     } catch (error) {
       setIsEmailChecked(false);
@@ -129,15 +168,14 @@ export default function SignupPanel({ switchToLogin }) {
       }
     }
   };
-  //이메일 중복 체크 끝
-
 
   const handleSignup = async () => {
     if (isFormValid) {
       const data = {
-        email: name,
+        email: email,
         nickname: userId,
-        password: password
+        password: password,
+        teamId: teamId,
       };
 
       try {
@@ -151,10 +189,24 @@ export default function SignupPanel({ switchToLogin }) {
         switchToLogin();
       } catch (error) {
         console.error('회원가입 실패', error);
-        alert('회원가입에 실패했습니다.');
+        if (error.response && error.response.data) {
+          alert(`회원가입에 실패했습니다: ${error.response.data.message}`);
+        } else {
+          alert('회원가입에 실패했습니다.');
+        }
         console.log('데이터:', data);
       }
     }
+  };
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
+  const handleItemClick = (item) => {
+    setSelectedItem(item.team);
+    setTeamId(item.id);
+    setShowDropdown(false);
   };
 
   return (
@@ -196,7 +248,7 @@ export default function SignupPanel({ switchToLogin }) {
       </CustomRow>
       <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
         <CustomRow width='80%' alignItems='center' justifyContent='flex-start'>
-          <Input type="text" placeholder="이메일을 알려주세요." value={name} onChange={e => setName(e.target.value)} />
+          <Input type="text" placeholder="이메일을 알려주세요." value={email} onChange={e => setEmail(e.target.value)} />
         </CustomRow>
         <CustomRow width='20%' alignItems='center' justifyContent='flex-start'>
           <IsCheckedButton isChecked={isEmailChecked} onClick={handleEmailCheck}>
@@ -206,10 +258,27 @@ export default function SignupPanel({ switchToLogin }) {
       </CustomRow>
 
       <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
-        <CustomFont color='black'>프로필 이미지</CustomFont>
-        <CustomFont color='black'>(선택)</CustomFont>
+        <CustomFont color='black'>Choose the club you support</CustomFont>
+        <CustomFont color='red'>*</CustomFont>
       </CustomRow>
-      <Input type="file" accept="image/*" onChange={handleProfileImageChange} />
+      <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
+        <DropdownContainer>
+          <DropdownButton onClick={toggleDropdown}>
+            {selectedItem}
+          </DropdownButton>
+          <DropdownContent show={showDropdown}>
+            {items.map((item, index) => (
+              <DropdownItem
+                key={index}
+                href="#"
+                onClick={() => handleItemClick(item)}
+              >
+                {item.team}
+              </DropdownItem>
+            ))}
+          </DropdownContent>
+        </DropdownContainer>
+      </CustomRow>
 
       <Button isActive={isFormValid} onClick={handleSignup}>회원가입</Button>
     </CustomColumn>
