@@ -233,6 +233,9 @@ export default function SignupPanel({ switchToLogin }) {
         <CustomFont color='black'>PASSWORD</CustomFont>
         <CustomFont color='red'>*</CustomFont>
       </CustomRow>
+      <CustomRow width='100%' alignItems='center' justifyContent='flex-start'>
+        <CustomFont color='red'>8~12자 이내, 대문자, 숫자 필수 포함</CustomFont>
+      </CustomRow>
       <Input type="password" placeholder="비밀번호를 입력하세요." value={password} onChange={handlePasswordChange} />
       <Input
         type="password"
