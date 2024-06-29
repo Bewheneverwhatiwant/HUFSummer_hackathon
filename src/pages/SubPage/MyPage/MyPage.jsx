@@ -274,7 +274,7 @@ export default function App() {
     if (window.confirm('구매하시겠습니까?')) {
       const accessToken = localStorage.getItem('accessToken');
       try {
-        const response = await axios.patch(`${import.meta.env.VITE_REACT_APP_SERVER}/my/donation/${donationId}`, {}, {
+        const response = await axios.patch(`${import.meta.env.VITE_REACT_APP_SERVER}/my/donation/${donationId}?donateId=1`, {}, {
           headers: {
             Authorization: `Bearer ${accessToken}`
           }
