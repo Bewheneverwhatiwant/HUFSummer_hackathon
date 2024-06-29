@@ -153,6 +153,7 @@ export default function App() {
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedItem, setSelectedItem] = useState("Select Team");
+  const [donateData, setDonateData] = useState([]);
 
   const [userInfo, setUserInfo] = useState({
     nickname: '',
@@ -193,8 +194,26 @@ export default function App() {
     }
   };
 
+
+  const fetchDonateData = async () => {
+    try {
+      const accessToken = localStorage.getItem('accessToken'); // accessToken 가져오기
+      const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/donate`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+      setDonateData(response.data);
+      console.log('기부 목록 가져오기 성공!', response.data);
+    } catch (error) {
+      console.error('기부 목록 가져오기 실패', error);
+    }
+  };
+
+
   // 유저 정보 요청 시작
   useEffect(() => {
+    fetchDonateData();
     fetchUserInfo();
   }, []);
 
@@ -255,7 +274,6 @@ export default function App() {
     if (window.confirm('구매하시겠습니까?')) {
       const accessToken = localStorage.getItem('accessToken');
       try {
-        donationId = 1; // 임시 처리
         const response = await axios.patch(`${import.meta.env.VITE_REACT_APP_SERVER}/my/donation/${donationId}`, {}, {
           headers: {
             Authorization: `Bearer ${accessToken}`
@@ -332,13 +350,13 @@ export default function App() {
               </CustomFont>
 
               <CustomRow>
-                {Donatedata.map((item) => (
+                {donateData.map((item) => (
                   <DonationItem
-                    key={item.id}
-                    id={item.id}
-                    img={item.img}
-                    text1={item.text1}
-                    text2={item.text2}
+                    key={item.donateId}
+                    id={item.donateId}
+                    img='https://ae01.alicdn.com/kf/S139a8230386c4dc68e22ac256c42d6bbw/TPU.jpg'
+                    text1={item.content}
+                    text2={`${item.price} 포인트`}
                     onDonate={handleDonatePoint}
                   />
                 ))}

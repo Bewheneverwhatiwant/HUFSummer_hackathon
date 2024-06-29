@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import Webcam from 'react-webcam';
@@ -74,23 +74,59 @@ const ActionButton = styled.button`
 const App = () => {
     const webcamRef = useRef(null);
     const [capturedImage, setCapturedImage] = useState(null);
-    const [isSuccess, setIsSuccess] = useState(false); // 이미지 업로드 성공 시 Modal
-    const [isFail, setIsFail] = useState(false); // 이미지 업로드 실패 시 Modal
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [isFail, setIsFail] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [missionId, setMissionId] = useState(null);
+
+    useEffect(() => {
+        const fetchMissionId = async () => {
+            try {
+                const accessToken = localStorage.getItem('accessToken');
+                const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/missions/today`, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                });
+                setMissionId(response.data.memberMissionId);
+                console.log('Fetched Mission ID:', response.data.memberMissionId);
+            } catch (error) {
+                console.error('Failed to fetch mission ID', error);
+            }
+        };
+        fetchMissionId();
+    }, []);
 
     const captureImage = () => {
         const imageSrc = webcamRef.current.getScreenshot();
+        console.log('Captured Image Source:', imageSrc);
         setCapturedImage(imageSrc);
     };
 
     const uploadImage = async () => {
+        if (!missionId) {
+            console.error('Mission ID is not available');
+            console.log('Mission ID:', missionId);
+            return;
+        }
+
         setIsLoading(true);
         const formData = new FormData();
-        const missionId = 4; // 절대 고치지 말것
-        formData.append('image', capturedImage);
+
+        const base64Image = capturedImage.split(',')[1];
+        const byteCharacters = atob(base64Image);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'image/jpeg' });
+
+        formData.append('image', blob, 'capturedImage.jpg');
+        console.log('Form Data:', formData.get('image'));
 
         try {
-            const accessToken = localStorage.getItem('accessToken'); // localStorage에서 accessToken 가져오기
+            const accessToken = localStorage.getItem('accessToken');
             const response = await axios.post(`${import.meta.env.VITE_REACT_APP_SERVER}/missions/${missionId}/completed`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -99,6 +135,9 @@ const App = () => {
             });
 
             setIsLoading(false);
+            console.log('Uploaded Image:', capturedImage);
+            console.log('API Response:', response.data);
+
             if (response.data.isCompleted) {
                 setIsSuccess(true);
             } else {
@@ -107,8 +146,10 @@ const App = () => {
         } catch (error) {
             console.error('이미지 업로드 중 오류 발생', error);
             setIsLoading(false);
+            console.log('Failed Image:', capturedImage);
             setIsFail(true);
         }
+        console.log('Used Mission ID:', missionId);
     };
 
     return (
