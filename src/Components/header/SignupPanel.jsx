@@ -56,6 +56,8 @@ const DropdownContent = styled.div`
   position: absolute;
   background-color: white;
   min-width: 160px;
+  max-height: 200px;
+  overflow-y: auto;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
   border-radius: 4px;
@@ -127,7 +129,7 @@ export default function SignupPanel({ switchToLogin }) {
       const response = await axios.get(`${import.meta.env.VITE_REACT_APP_SERVER}/auth/check-nickname`, {
         params: { nickname: userId }
       });
-      
+
       if (response.status === 200) {
         setIsIdChecked(true);
         alert('사용 가능한 아이디입니다.');
